@@ -12,7 +12,9 @@ public class Feedback {
     public static String info(Object data) {
         Dictionary<String, Object> ret = new Hashtable<>();
         ret.put("errno", 0);
-        ret.put("data", data);
+        if(data != null) {
+            ret.put("data", data);
+        }
         return gson.toJson(ret);
     }
 

@@ -26,17 +26,14 @@ public class MiscController {
     }
 
     @PostMapping("/api/getUserByToken")
-    public String login(@RequestBody Token token){
+    public String getUserByToken(@RequestBody Token token){
         try {
             String username = TokenUtils.getUserByToken(token.getToken());
-            HashMap<String, Object> queryMap = new HashMap<>();
-            queryMap.put("username", username);
-            List<User> users = userMapper.selectByMap(queryMap);
-            if(users.size() == 0) {
+            User user = userMapper.selectUserByUsername(username);
+            if(user == null) {
                 return Feedback.error("token失效！");
             }
             else {
-                User user = users.get(0);
                 user.setPassword(null);
                 Dictionary<String, Object> data = new Hashtable<>();
                 data.put("user", user);

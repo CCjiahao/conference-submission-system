@@ -19,19 +19,17 @@
                 <a-form-item name="school" :rules="[{ required: true, message: '请输入学校/组织!' }]">
                     <a-input v-model:value="formState.school" placeholder="学校/组织" />
                 </a-form-item>
-
+                
                 <a-form-item name="country" :rules="[{ required: true, message: '请输入国家!' }]">
-                    <a-input v-model:value="formState.country" placeholder="国家" />
+                    <a-input v-model:value="formState.country" v-show="false" placeholder="国家" />
+                    <a-select placeholder="国家" label-in-value
+                        style="width: 100%" :options="countrys" @change="countryChange" />
                 </a-form-item>
 
                 <a-form-item name="expertise" :rules="[{ required: true, message: '请输入所属领域!' }]">
                     <a-input v-model:value="formState.expertise" v-show="false" placeholder="所属领域" />
-                    <a-select v-model:value="formState.expertise" mode="multiple" placeholder="所属领域" label-in-value
-                        style="width: 100%" :options="expertise_options" />
-                </a-form-item>
-
-                <a-form-item name="country" :rules="[{ required: true, message: '请输入国家!' }]">
-                    <a-input v-model:value="formState.country" placeholder="国家" />
+                    <a-select mode="multiple" placeholder="所属领域" label-in-value
+                        style="width: 100%" :options="expertise_options" @change="expertiseChange" />
                 </a-form-item>
 
                 <a-form-item name="password"
@@ -43,19 +41,15 @@
                     <a-input v-model:value="formState.email" placeholder="邮箱" />
                 </a-form-item>
 
-                <a-form-item name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
-                    <a-input v-model:value="formState.email" placeholder="邮箱" />
-                </a-form-item>
-
-                <a-form-item name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
+                <a-form-item name="code" :rules="[{ required: true, message: '请输入验证码!' }]">
                     <a-input-group compact>
-                        <a-input v-model:value="formState.code" style="width: 70%" />
-                        <a-button type="primary" style="width: 30%;">Submit</a-button>
+                        <a-input v-model:value="formState.code" style="width: calc(100% - 100px)" />
+                        <a-button type="primary" style="width: 100px;" @click="getCode">获取验证码</a-button>
                     </a-input-group>
                 </a-form-item>
 
                 <a-form-item>
-                    <a-button :disabled="disabled" type="primary" html-type="submit">
+                    <a-button :disabled="disabled" type="primary" html-type="submit" style="width: 100%">
                         注册
                     </a-button>
                 </a-form-item>
@@ -64,16 +58,20 @@
     </a-row>
 </template>
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import { reactive, computed } from 'vue';
-import { LoginApi } from '@/request/api'
+import { GetVerificationCodeApi } from '@/request/api'
+import { message, SelectProps } from 'ant-design-vue';
+import countrys from './countrys'
+import { RegisterApi } from '@/request/api'
+import { useRouter } from 'vue-router';
+
 interface FormState {
     username: string;
     name: string;
     email: string;
     school: string;
     country: string;
-    expertise: string[];
+    expertise: string;
     password: string;
     code: string;
 }
@@ -83,25 +81,60 @@ const formState = reactive<FormState>({
     email: '',
     school: '',
     country: '',
-    expertise: [],
+    expertise: '',
     password: '',
     code: '',
 });
-const router = useRouter();
+
 const expertise_options: { value: string }[] = [];
 expertise_options.push({ value: 'CV' })
 expertise_options.push({ value: 'NLP' })
 expertise_options.push({ value: 'ML' })
+
+const countryChange = (value: any) => {
+    formState.country = value['value'];
+};
+
+const expertiseChange = (values: any) => {
+    var expertises = [];
+    for(var i = 0; i < values.length; i++){
+        expertises.push(values[i]['value']);
+    }
+    formState.expertise = expertises.toString()
+};
+
+const router = useRouter();
 const onFinish = (values: any) => {
+    RegisterApi(formState.username, formState.name, formState.school, formState.country, formState.expertise, formState.password, formState.email, formState.code).then((res: any) => {
+        if (res.errno === 0) {
+            message.info('注册成功，请登录！');
+            router.push("/login");
+        }
+    }).catch((err: any) => {
+        console.log(err);
+    })
     console.log('Success:', values);
 };
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
 };
+
+const getCode = () => {
+    // 这里没有验证有效性，默认有效
+    GetVerificationCodeApi(formState.email).then((res: any) => {
+        if (res.errno === 0) {
+            message.info('验证码发送成功，请在十分钟内使用');
+        }
+    }).catch((err: any) => {
+        console.log(err);
+    })
+};
+
 const disabled = computed(() => {
     return !(formState.username && formState.password);
 });
+
 </script>
 <style scoped lang='scss'>
 .logo {
