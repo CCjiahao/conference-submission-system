@@ -68,13 +68,13 @@ router.beforeEach((to, from, next) => {
                                 {
                                     path: '/submission/my',
                                     name: 'my_submission',
-                                    component: () => import('@/views/submission/my.vue'),
+                                    component: () => import('@/views/submission/My.vue'),
                                     meta: {}
                                 },
                                 {
                                     path: '/submission/new',
                                     name: 'submission/new',
-                                    component: () => import('@/views/submission/new.vue'),
+                                    component: () => import('@/views/submission/New.vue'),
                                     meta: {}
                                 }
                             ]

@@ -61,7 +61,7 @@
 import { reactive, computed } from 'vue';
 import { GetVerificationCodeApi } from '@/request/api'
 import { message, SelectProps } from 'ant-design-vue';
-import countrys from './countrys'
+import countrys from '@/variable/countrys'
 import { RegisterApi } from '@/request/api'
 import { useRouter } from 'vue-router';
 
@@ -113,7 +113,6 @@ const onFinish = (values: any) => {
     }).catch((err: any) => {
         console.log(err);
     })
-    console.log('Success:', values);
 };
 
 const onFinishFailed = (errorInfo: any) => {

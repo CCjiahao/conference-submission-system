@@ -53,7 +53,7 @@ import { userStore } from '@/store/user';
 import { useRoute } from 'vue-router';
 
 // 获取用户信息
-const store = userStore()
+const store = userStore();
 const user = store.getState
 
 // 获取路由

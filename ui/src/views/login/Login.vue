@@ -60,7 +60,6 @@ const formState = reactive<FormState>({
 const router = useRouter();
 
 const onFinish = (values: any) => {
-    console.log('Success:', values);
     LoginApi(formState.username, formState.password, formState.remember).then((res: any) => {
         if (res.errno === 0) {
             localStorage.setItem('token', res.data['token']);

@@ -1,5 +1,8 @@
 <template>
-<div>我的提交</div>
+    <div>
+        <b>我的投稿记录</b>
+        
+    </div>
 </template>
 
 <script setup lang="ts">

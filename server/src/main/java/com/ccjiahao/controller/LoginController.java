@@ -25,7 +25,6 @@ public class LoginController {
         this.userMapper = userMapper;
         this.verificationCodeMapper = verificationCodeMapper;
     }
-
     @PostMapping("/api/login")
     public String login(@RequestBody Login user){
         User user1 = userMapper.selectUserByUsernameAndPassword(user.getUsername(), user.getPassword());
@@ -53,15 +52,7 @@ public class LoginController {
         if(!verificationCodeMapper.selectByEmailAndCodeAndTime(register.getEmail(), register.getCode())) {
             return Feedback.error("验证码过期或不正确！");
         }
-        user = new User();
-        user.setUsername(register.getUsername());
-        user.setName(register.getName());
-        user.setPassword(register.getPassword());
-        user.setEmail(register.getEmail());
-        user.setSchool(register.getSchool());
-        user.setCountry(register.getCountry());
-        user.setExpertise(register.getExpertise());
-        user.setRole("researcher");
+        user = new User(register.getUsername(), register.getName(), register.getPassword(), register.getEmail(), register.getSchool(), register.getCountry(), register.getExpertise(), "researcher");
         userMapper.insert(user);
         return Feedback.info(null);
     }
