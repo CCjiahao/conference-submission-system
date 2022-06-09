@@ -99,6 +99,18 @@ router.beforeEach((to, from, next) => {
                                 name: 'review_log',
                                 component: () => import('@/views/review/log.vue'),
                                 meta: {}
+                            },
+                            {
+                                path: '/review/detail',
+                                name: 'review_detail',
+                                component: () => import('@/views/review/detail.vue'),
+                                meta: {}
+                            },
+                            {
+                                path: '/review/edit',
+                                name: 'review_edit',
+                                component: () => import('@/views/review/edit.vue'),
+                                meta: {}
                             }
                         ]
                     })

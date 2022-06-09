@@ -65,6 +65,8 @@ var routeMap: { [key: string]: [string, string]; } = {
     "/submission/new" : ["submission", "new_submission"],
     "/review/info" : ["review", "review_info"],
     "/review/log" : ["review", "review_log"],
+    "/review/detail":["review","review_detail"],
+    "/review/edit":["review","review_edit"],
     "/chairman/index" : ["chairman", "chairman_index"],
     "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
     "/chairman/manage/paper" : ["chairman", "chairman_manage_paper"],
