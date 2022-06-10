@@ -31,7 +31,7 @@ public class PaperController {
     public String submitPaper(@RequestBody Paper paper) {
         try {
             String username = TokenUtils.getUserByToken(paper.getToken());
-            com.ccjiahao.entity.Paper paper1 = new com.ccjiahao.entity.Paper(paper.getPaper(), username, paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCollaborators(), new Date(System.currentTimeMillis()), "待审核");
+            com.ccjiahao.entity.Paper paper1 = new com.ccjiahao.entity.Paper(0, username, paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCollaborators(), paper.getPaper(), new Date(System.currentTimeMillis()), "待审核");
             paperMapper.insert(paper1);
         } catch (Exception e) {
             return Feedback.error("Token失效！");
