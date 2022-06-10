@@ -7,16 +7,19 @@ import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.UserMapper;
 import com.ccjiahao.mapper.VerificationCodeMapper;
 import com.ccjiahao.utils.TokenUtils;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 @CrossOrigin(origins = {"*", "null"})
 @RestController
 public class UserController {
     private final UserMapper userMapper;
+    private Gson gson=new Gson();
 
     @Autowired
     public UserController(UserMapper userMapper) {
@@ -35,6 +38,12 @@ public class UserController {
             data.put("user", user);
             return Feedback.info(data);
         }
+    }
+
+    @GetMapping("/api/getUsers")
+    public String getUsers(){
+        List<User> users = userMapper.selectList(null);
+        return gson.toJson(users);
     }
 
     @PostMapping("/api/getUserByToken")
