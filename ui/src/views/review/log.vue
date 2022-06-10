@@ -1,6 +1,7 @@
 <template>
 <h2>审稿记录</h2>
-  <a-table :columns="columns" :data-source="data">
+ <a-button type="primary" @click="getPapers()">获取论文</a-button>
+  <a-table :columns="columns" :data-source="papers">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'id'">
         <span>
@@ -34,6 +35,7 @@
 import { ref, reactive, computed } from 'vue';
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 const columns = [
   {
@@ -48,8 +50,8 @@ const columns = [
   },
   {
     title: '提交时间',
-    dataIndex: 'commit_time',
-    key: 'commit_time',
+    dataIndex: 'commitTime',
+    key: 'commitTime',
   },
   {
     title: '状态',
@@ -100,6 +102,23 @@ export default defineComponent({
     SmileOutlined,
     DownOutlined,
   },
+  data(){
+    return{
+      papers:[]
+    }
+  },
+  methods:{
+      getPapers(){
+          axios({
+              url:"http://localhost:8081/api/getPapers",
+              method:'GET',
+          }).then(res=>{
+              console.log(res.data);
+              this.papers= res.data;
+          })
+      }
+  }
+  ,
   setup() {
     return {
       data,

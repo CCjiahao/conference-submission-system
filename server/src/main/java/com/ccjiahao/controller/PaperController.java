@@ -8,13 +8,12 @@ import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.UserMapper;
 import com.ccjiahao.mapper.VerificationCodeMapper;
 import com.ccjiahao.utils.TokenUtils;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @CrossOrigin(origins = {"*", "null"})
 @RestController
@@ -37,5 +36,12 @@ public class PaperController {
             return Feedback.error("Token失效！");
         }
         return Feedback.info(null);
+    }
+
+    private Gson gson=new Gson();
+    @GetMapping("/api/getPapers")
+    public String getPapers(){
+        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
+        return gson.toJson(papers);
     }
 }
