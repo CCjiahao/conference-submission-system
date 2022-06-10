@@ -1,6 +1,6 @@
 <template>
 <h2>审稿记录</h2>
- <a-button type="primary" @click="getPapers()">获取论文</a-button>
+ <!-- <a-button type="primary" @click="getPapers()">获取论文</a-button> -->
   <a-table :columns="columns" :data-source="papers">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'id'">
@@ -117,7 +117,11 @@ export default defineComponent({
               this.papers= res.data;
           })
       }
-  }
+  },
+    mounted() {
+        // 调用请求数据的方法
+        this.getPapers()
+    }
   ,
   setup() {
     return {
