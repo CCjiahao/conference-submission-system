@@ -37,7 +37,7 @@ export default defineComponent({
             this.$router.go(-1);
         },
         goReview(id:any){
-            this.$router.push({path:"/review/edit",params:{id:id}});
+            this.$router.push({path:"/review/edit",query:{id:id}});
         }
     },
     mounted() {
