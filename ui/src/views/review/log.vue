@@ -13,16 +13,16 @@
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'title'">
           <!--每篇文章都有对应的detail页，辩论页，编辑审阅页-->
-        <router-link to="/review/detail">
+        <router-link :to="{ path: '/review/detail', query: { id: record.id }} ">
           {{ record.title }}
         </router-link>
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
             <!--下载请求-->
-          <a>下载文章</a>
+          <a :href="'http://localhost:8081/api/download?uuid='+record.paper" target="_blank">下载文章</a>
           <a-divider type="vertical" />
-          <router-link to="/review/edit">编辑审阅</router-link>
+          <router-link :to="{ path: '/review/edit', query: { id: record.id }} ">编辑审阅</router-link>
           <a-divider type="vertical" />
           <a>查看辩论</a>
         </span>

@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
                                 meta: {}
                             },
                             {
-                                path: '/review/detail',
+                                path: '/review/detail/',
                                 name: 'review_detail',
                                 component: () => import('@/views/review/detail.vue'),
                                 meta: {}

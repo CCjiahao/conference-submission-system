@@ -44,4 +44,10 @@ public class PaperController {
         List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
         return gson.toJson(papers);
     }
+
+    @GetMapping("api/getPaperById")
+    public String getPaperById(@RequestParam String id){
+        com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);
+        return gson.toJson(paper);
+    }
 }
