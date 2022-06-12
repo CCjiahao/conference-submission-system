@@ -23,6 +23,9 @@
                 <a-menu-item key="review_info">
                     <router-link to="/review/info">审稿人信息</router-link>
                 </a-menu-item>
+                <a-menu-item key="review_hall">
+                    <router-link to="/review/hall">审稿大厅</router-link>
+                </a-menu-item>
                 <a-menu-item key="review_log">
                     <router-link to="/review/log">审稿记录</router-link>
                 </a-menu-item>
@@ -64,6 +67,7 @@ var routeMap: { [key: string]: [string, string]; } = {
     "/submission/my" : ["submission", "my_submission"],
     "/submission/new" : ["submission", "new_submission"],
     "/review/info" : ["review", "review_info"],
+    "/review/hall" : ["review", "review_hall"],
     "/review/log" : ["review", "review_log"],
     "/review/detail":["review","review_detail"],
     "/review/edit":["review","review_edit"],

@@ -17,8 +17,10 @@ export const GetPapersApi = () => instance.get('http://localhost:8081/api/getPap
 // 根据ID获取论文
 export const GetPapersByIdApi = (id: string) => instance.get('http://localhost:8081/api/getPaperById?id=' + id)
 // 根据作者来获取论文列表
-export const GetPapersByAuthorApi = (author: string) => instance.get('http://localhost:8081/api/getPaperByAuthor?author=' + author)
+export const GetPapersByAuthorApi = (author: string) => instance.get('http://localhost:8081/api/getPapersByAuthor?author=' + author)
+// 筛选审稿者可以审阅的论文列表
+export const GetPapersByReviewerApi = (token: string) => instance.get('http://localhost:8081/api/getPapersByReviewer?token=' + token)
 // 根据token和id来删除论文（只能删除待审核和未选中论文）
 export const DeletePaperByIdApi = (token: string, id: number) => instance.get('http://localhost:8081/api/deletePaperById?token=' + token + '&id=' + id)
 //  提交评审意见
-export const SubmitReviewApi= (token:string, paperId:string,isAssociated:string,logic:number,sci:number,innovation:number,passOrReject:string,suggestion:string)=>instance.post('/api/submitReview', { token: token, paperId:paperId, isAssociated:isAssociated, logic:logic,sci:sci,innovation:innovation ,passOrReject:passOrReject, suggestion:suggestion })
+export const SubmitReviewApi = (token: string, paperId: string, isAssociated: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/submitReview', { token: token, paperId: paperId, isAssociated: isAssociated, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })

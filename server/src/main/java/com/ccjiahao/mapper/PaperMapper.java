@@ -20,6 +20,12 @@ public interface PaperMapper extends BaseMapper<Paper> {
         else return papers.get(0);
     }
 
+    public default List<Paper> selectPaperByState(String state) {
+        HashMap<String, Object> queryMap = new HashMap<>();
+        queryMap.put("state", state);
+        return this.selectByMap(queryMap);
+    }
+
     public default List<Paper> selectPaperByAuthor(String author) {
         List<Paper> papers = this.selectList(null);
         List<Paper> data = new ArrayList<Paper>();

@@ -12,10 +12,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin(origins = {"*", "null"})
 @RestController
@@ -54,11 +51,34 @@ public class PaperController {
         return Feedback.info(data);
     }
 
-    @GetMapping("api/getPaperByAuthor")
-    public String getPaperByAuthor(@RequestParam String author){
+    @GetMapping("api/getPapersByAuthor")
+    public String getPapersByAuthor(@RequestParam String author){
         Dictionary<String, Object> data = new Hashtable<>();
         data.put("papers", paperMapper.selectPaperByAuthor(author));
         return Feedback.info(data);
+    }
+
+    @GetMapping("api/getPapersByReviewer")
+    public String getPapersByReviewer(@RequestParam String token) {
+        try {
+            String username = TokenUtils.getUserByToken(token);
+            User user = userMapper.selectUserByUsername(username);
+            if(user == null) {
+                return Feedback.error("该用户不存在");
+            }
+            List<com.ccjiahao.entity.Paper> papers = paperMapper.selectPaperByState("待审核");
+            List<com.ccjiahao.entity.Paper> true_papers = new ArrayList<>();
+            for (com.ccjiahao.entity.Paper paper:papers) {
+                if(user.isExpertise(paper.getExpertise()) && !paper.isAuthor(username)) {
+                    true_papers.add(paper);
+                }
+            }
+            Dictionary<String, Object> data = new Hashtable<>();
+            data.put("papers", true_papers);
+            return Feedback.info(data);
+        } catch (Exception e) {
+            return Feedback.error("token失效！");
+        }
     }
 
     @GetMapping("api/deletePaperById")
