@@ -34,7 +34,6 @@ import type { Ref } from 'vue';
 import { userStore } from '@/store/user';
 import { GetPapersByAuthorApi, DeletePaperByIdApi } from '@/request/api';
 import { message } from 'ant-design-vue';
-import { assert } from 'console';
 
 interface PaperItem {
     id: number,

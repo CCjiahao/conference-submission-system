@@ -44,6 +44,9 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/submission/my'
                         })
+                        if(to.fullPath == '/review/info' || to.fullPath == '/chairman/index') {
+                            to.fullPath = '/submission/my';
+                        }
                     }
                     else if (user.role == 'reviewer') {
                         router.addRoute({
@@ -51,6 +54,9 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/review/info'
                         })
+                        if(to.fullPath == '/submission/my' || to.fullPath == '/chairman/index') {
+                            to.fullPath = '/review/info';
+                        }
                     }
                     else {
                         router.addRoute({
@@ -58,6 +64,9 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/chairman/index'
                         })
+                        if(to.fullPath == '/review/info' || to.fullPath == '/submission/my') {
+                            to.fullPath = '/chairman/index';
+                        }
                     }
                     if (user.role == 'researcher' || user.role == 'reviewer') {
                         router.addRoute(

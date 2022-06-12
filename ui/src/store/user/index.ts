@@ -30,6 +30,15 @@ export const userStore = defineStore('user', {
             this.country = user.country
             this.expertise = user.expertise
             this.role = user.role
+        },
+        clear() {
+            this.username = null
+            this.name = null
+            this.email = null
+            this.school = null
+            this.country = null
+            this.expertise = null
+            this.role = null
         }
     }
 })

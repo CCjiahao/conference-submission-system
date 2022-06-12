@@ -44,6 +44,7 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { userStore } from '@/store/user';
 import { reactive, computed } from 'vue';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { LoginApi } from '@/request/api'
@@ -58,11 +59,13 @@ const formState = reactive<FormState>({
     remember: true,
 });
 const router = useRouter();
+const store = userStore();
 
 const onFinish = (values: any) => {
     LoginApi(formState.username, formState.password, formState.remember).then((res: any) => {
         if (res.errno === 0) {
             localStorage.setItem('token', res.data['token']);
+            store.clear()
             router.push("/");
         }
     }).catch((err: any) => {
