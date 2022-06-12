@@ -1,6 +1,20 @@
 <template>
     <div>论文管理界面</div>
-    <a-table :dataSource="papers" :columns="columns" />
+    <a-table :dataSource="papers" :columns="columns" >
+        <template #bodyCell="{ column }">
+            <template v-if="column.key === 'action'">
+                <span>
+                    <a>查看摘要</a>
+                    <a-divider type="vertical" />
+                    <a>下载论文</a>
+                    <a-divider type="vertical" />
+                    <a>查看辩论</a>
+                    <a-divider type="vertical" />
+                    <a>删除论文</a>
+                </span>
+            </template>
+        </template>
+    </a-table>
 </template>
 
 <script lang="ts">
