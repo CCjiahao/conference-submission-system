@@ -53,4 +53,11 @@ public class PaperController {
         data.put("paper", paperMapper.selectPaperById(id));
         return Feedback.info(data);
     }
+
+    @GetMapping("api/getPaperByAuthor")
+    public String getPaperByAuthor(@RequestParam String author){
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("papers", paperMapper.selectPaperByAuthor(author));
+        return Feedback.info(data);
+    }
 }

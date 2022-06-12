@@ -31,8 +31,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue';
-import { GetPapersApi } from '@/request/api';
-import { number } from 'vue-types';
+import { userStore } from '@/store/user';
+import { GetPapersByAuthorApi } from '@/request/api';
 
 interface PaperItem {
     id: number,
@@ -70,11 +70,18 @@ const columns = [
 ];
 const dataSource: Ref<PaperItem[]> = ref([]);
 
-GetPapersApi().then((res: any) => {
-    if (res.errno === 0) {
-        dataSource.value = res.data['papers'];
-    }
-})
+
+// 获取用户信息
+const store = userStore();
+const user = store.getState
+
+if (user.username != null) {
+    GetPapersByAuthorApi(user.username).then((res: any) => {
+        if (res.errno === 0) {
+            dataSource.value = res.data['papers'];
+        }
+    })
+}
 
 const onDelete = (key: string) => {
     // dataSource.value = dataSource.value.filter(item => item.id !== key);

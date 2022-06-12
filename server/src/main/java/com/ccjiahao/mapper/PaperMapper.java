@@ -5,6 +5,8 @@ import com.ccjiahao.entity.Paper;
 import com.ccjiahao.entity.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,5 +18,22 @@ public interface PaperMapper extends BaseMapper<Paper> {
         List<Paper> papers = this.selectByMap(queryMap);
         if (papers.size() == 0) return null;
         else return papers.get(0);
+    }
+
+    public default List<Paper> selectPaperByAuthor(String author) {
+        List<Paper> papers = this.selectList(null);
+        List<Paper> data = new ArrayList<Paper>();
+        for (Paper paper: papers) {
+            if(paper.getUsername().equals(author)){
+                data.add(paper);
+            }
+            else {
+                String[] collaborators = paper.getCollaborators().split(",");
+                if (Arrays.asList(collaborators).contains(author)) {
+                    data.add(paper);
+                }
+            }
+        }
+        return data;
     }
 }

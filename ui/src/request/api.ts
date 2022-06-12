@@ -16,3 +16,5 @@ export const SubmitPaperApi = (token: string, title: string, abstracts: string, 
 export const GetPapersApi = () => instance.get('http://localhost:8081/api/getPapers')
 // 根据ID获取论文
 export const GetPapersByIdApi = (id: string) => instance.get('http://localhost:8081/api/getPaperById?id=' + id)
+// 根据作者来获取论文列表
+export const GetPapersByAuthorApi = (author: string) => instance.get('http://localhost:8081/api/getPaperByAuthor?author=' + author)
