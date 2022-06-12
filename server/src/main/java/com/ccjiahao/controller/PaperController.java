@@ -60,4 +60,25 @@ public class PaperController {
         data.put("papers", paperMapper.selectPaperByAuthor(author));
         return Feedback.info(data);
     }
+
+    @GetMapping("api/deletePaperById")
+    public String deletePaperById(@RequestParam String token, @RequestParam String id) {
+        try {
+            String username = TokenUtils.getUserByToken(token);
+            com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);
+            if (paper == null) {
+                return Feedback.error("没有找到该论文");
+            }
+            if (!paper.isAuthor(username)) {
+                return Feedback.error("你没有该权限");
+            }
+            if (paper.getState().equals("待审核") || paper.getPaper().equals("未中选")) {
+                paperMapper.deleteById(id);
+                return Feedback.info(null);
+            }
+            return Feedback.error(paper.getState() + "阶段论文不支持删除");
+        } catch (Exception e) {
+            return Feedback.error("token失效！");
+        }
+    }
 }

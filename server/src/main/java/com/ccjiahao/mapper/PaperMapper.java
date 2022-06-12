@@ -24,14 +24,8 @@ public interface PaperMapper extends BaseMapper<Paper> {
         List<Paper> papers = this.selectList(null);
         List<Paper> data = new ArrayList<Paper>();
         for (Paper paper: papers) {
-            if(paper.getUsername().equals(author)){
+            if(paper.isAuthor(author)){
                 data.add(paper);
-            }
-            else {
-                String[] collaborators = paper.getCollaborators().split(",");
-                if (Arrays.asList(collaborators).contains(author)) {
-                    data.add(paper);
-                }
             }
         }
         return data;

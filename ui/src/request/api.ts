@@ -18,3 +18,5 @@ export const GetPapersApi = () => instance.get('http://localhost:8081/api/getPap
 export const GetPapersByIdApi = (id: string) => instance.get('http://localhost:8081/api/getPaperById?id=' + id)
 // 根据作者来获取论文列表
 export const GetPapersByAuthorApi = (author: string) => instance.get('http://localhost:8081/api/getPaperByAuthor?author=' + author)
+// 根据token和id来删除论文（只能删除待审核和未选中论文）
+export const DeletePaperByIdApi = (token: string, id: number) => instance.get('http://localhost:8081/api/deletePaperById?token=' + token + '&id=' + id)

@@ -18,8 +18,8 @@
                     <router-link v-if="record.state == '中选'" :to="{ path: '/review/detail', query: { id: record.id } }">
                         提交最终版论文</router-link>
                     <a-divider v-if="record.state == '待审核' || record.state == '未中选'" type="vertical" />
-                    <a-popconfirm v-if="record.state == '待审核' || record.state == '未中选'" title="Sure to delete?"
-                        @confirm="onDelete(record.key)">
+                    <a-popconfirm v-if="record.state == '待审核' || record.state == '未中选'" title="确认删除?"
+                        @confirm="onDelete(record.id)">
                         <a>删除</a>
                     </a-popconfirm>
                 </template>
@@ -32,7 +32,9 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue';
 import { userStore } from '@/store/user';
-import { GetPapersByAuthorApi } from '@/request/api';
+import { GetPapersByAuthorApi, DeletePaperByIdApi } from '@/request/api';
+import { message } from 'ant-design-vue';
+import { assert } from 'console';
 
 interface PaperItem {
     id: number,
@@ -70,7 +72,6 @@ const columns = [
 ];
 const dataSource: Ref<PaperItem[]> = ref([]);
 
-
 // 获取用户信息
 const store = userStore();
 const user = store.getState
@@ -83,8 +84,16 @@ if (user.username != null) {
     })
 }
 
-const onDelete = (key: string) => {
-    // dataSource.value = dataSource.value.filter(item => item.id !== key);
+const onDelete = (id: number) => {
+    const token = localStorage.getItem('token');
+    if (token != null) {
+        DeletePaperByIdApi(token, id).then((res: any) => {
+            if (res.errno === 0) {
+                message.info("论文删除成功！");
+                dataSource.value = dataSource.value.filter(item => item.id !== id);
+            }
+        })
+    }
 };
 </script>
 

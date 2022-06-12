@@ -3,6 +3,7 @@ package com.ccjiahao.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @Data
@@ -17,4 +18,9 @@ public class Paper {
     private String paper;
     private Date commitTime;
     private String state;
+
+    public boolean isAuthor(String username) {
+        if (username.equals(this.username)) return true;
+        return Arrays.asList(collaborators.split(",")).contains(username);
+    }
 }
