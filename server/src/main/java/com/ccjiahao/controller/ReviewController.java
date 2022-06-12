@@ -7,14 +7,13 @@ import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
 import com.ccjiahao.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 @CrossOrigin(origins = {"*", "null"})
@@ -53,6 +52,11 @@ public class ReviewController {
         return Feedback.info(null);
     }
 
-
+    @GetMapping("api/getReviewByPaperId")
+    public String getReviewByPaperId(@RequestParam String paperid){
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("review", reviewMapper.selectReviewByPaperId(paperid));
+        return Feedback.info(data);
+    }
 
 }

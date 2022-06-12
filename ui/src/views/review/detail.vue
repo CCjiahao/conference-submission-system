@@ -6,7 +6,7 @@
     <a :href="'http://localhost:8081/api/download?uuid=' + paper.paper" target="_blank">下载论文</a>
     <br>
     <a-button type="primary" @click="goBack">返回</a-button>
-    <a-button type="primary" @click="goReview(paper.id)">审阅</a-button>
+    <a-button v-if="paper.state==='待审核'" type="primary" @click="goReview(paper.id)">审阅</a-button>
 </template>
 
 <script lang="ts">

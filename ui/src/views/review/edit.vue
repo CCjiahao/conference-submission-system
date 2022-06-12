@@ -15,7 +15,7 @@
     <a-form :model="ReviewState" :label-col="labelCol" :wrapper-col="wrapperCol" layout='vertical'>
       <a-form-item label="1.是否符合本会议议题?">
         <a-col offset="1">
-          <a-radio-group v-model:value="ReviewState.relativy" name="radioGroup">
+          <a-radio-group v-model:value="ReviewState.isAssociated" name="radioGroup">
             <a-radio value="不符合">不符合</a-radio>
             <a-radio value="符合">符合</a-radio>
           </a-radio-group>
@@ -65,7 +65,7 @@
         </a-col>
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="onSubmit">提交</a-button>
+        <a-button type="primary" @click="submitAndJump">提交</a-button>
         <a-button style="margin-left: 10px" @click="goBack">返回</a-button>
       </a-form-item>
     </a-form>
@@ -76,10 +76,11 @@
 
 import { defineComponent, reactive, toRaw, ref } from 'vue';
 import type { UnwrapRef } from 'vue';
-import { GetPapersByIdApi } from '@/request/api';
+import { GetPapersByIdApi,SubmitReviewApi } from '@/request/api';
 
 interface ReviewState {
-  relativy: string,
+  paperId:string,
+  isAssociated: string,
   logic: number,
   sci: number,
   innovation: number,
@@ -88,7 +89,8 @@ interface ReviewState {
 }
 
 const ReviewState = reactive<ReviewState>({
-  relativy: '符合',
+  paperId:'',
+  isAssociated: '符合',
   logic: 33,
   sci: 33,
   innovation: 33,
@@ -96,6 +98,7 @@ const ReviewState = reactive<ReviewState>({
   suggestion: '',
 });
 
+const token = localStorage.getItem('token');
 
 export default defineComponent({
   components: {
@@ -111,11 +114,16 @@ export default defineComponent({
         console.log(res);
         if (res.errno === 0) {
           this.paper = res.data['paper'];
+          ReviewState.paperId = res.data['paper'].id;
         }
       })
     },
     goBack() {
       this.$router.go(-1);
+    },
+    submitAndJump(){
+      this.onSubmit();
+      this.goBack();
     }
   },
   mounted() {
@@ -133,6 +141,15 @@ export default defineComponent({
 
     const onSubmit = () => {
       console.log('submit!', toRaw(ReviewState));
+      if (token == null) {
+        console.log("登录已过期");
+        return;
+      };
+      SubmitReviewApi(token,ReviewState.paperId,ReviewState.isAssociated,ReviewState.logic,ReviewState.sci,ReviewState.innovation,ReviewState.passOrReject,ReviewState.suggestion).then((res:any)=>{
+        console.log(res);
+      }).catch((err:any)=>{
+          console.log(err);
+      });
     };
     return {
       marks,
