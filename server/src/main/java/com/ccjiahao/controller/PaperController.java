@@ -3,8 +3,10 @@ package com.ccjiahao.controller;
 import com.ccjiahao.dto.Feedback;
 import com.ccjiahao.dto.Login;
 import com.ccjiahao.dto.Paper;
+import com.ccjiahao.entity.Review;
 import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.PaperMapper;
+import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
 import com.ccjiahao.mapper.VerificationCodeMapper;
 import com.ccjiahao.utils.TokenUtils;
@@ -19,10 +21,12 @@ import java.util.*;
 public class PaperController {
     private final UserMapper userMapper;
     private final PaperMapper paperMapper;
+    private final ReviewMapper reviewMapper;
     @Autowired
-    public PaperController(UserMapper userMapper, PaperMapper paperMapper) {
+    public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper) {
         this.userMapper = userMapper;
         this.paperMapper = paperMapper;
+        this.reviewMapper = reviewMapper;
     }
 
     @PostMapping("/api/submitPaper")
@@ -75,6 +79,23 @@ public class PaperController {
             }
             Dictionary<String, Object> data = new Hashtable<>();
             data.put("papers", true_papers);
+            return Feedback.info(data);
+        } catch (Exception e) {
+            return Feedback.error("token失效！");
+        }
+    }
+
+    @GetMapping("api/getReviewedPapersByReviewer")
+    public String getReviewedPapersByReviewer(@RequestParam String token) {
+        try {
+            String username = TokenUtils.getUserByToken(token);
+            List<Review> reviews = reviewMapper.selectReviewByReviewer(username);
+            List<com.ccjiahao.entity.Paper> papers = new ArrayList<>();
+            for (Review review : reviews) {
+                papers.add(paperMapper.selectPaperById(String.valueOf(review.getPaperId())));
+            }
+            Dictionary<String, Object> data = new Hashtable<>();
+            data.put("papers", papers);
             return Feedback.info(data);
         } catch (Exception e) {
             return Feedback.error("token失效！");

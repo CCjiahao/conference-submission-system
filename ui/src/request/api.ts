@@ -20,6 +20,8 @@ export const GetPapersByIdApi = (id: string) => instance.get('http://localhost:8
 export const GetPapersByAuthorApi = (author: string) => instance.get('http://localhost:8081/api/getPapersByAuthor?author=' + author)
 // 筛选审稿者可以审阅的论文列表
 export const GetPapersByReviewerApi = (token: string) => instance.get('http://localhost:8081/api/getPapersByReviewer?token=' + token)
+// 筛选审稿者已经审阅的论文列表
+export const GetReviewedPapersByReviewerApi = (token: string) => instance.get('http://localhost:8081/api/getReviewedPapersByReviewer?token=' + token)
 // 根据token和id来删除论文（只能删除待审核和未选中论文）
 export const DeletePaperByIdApi = (token: string, id: number) => instance.get('http://localhost:8081/api/deletePaperById?token=' + token + '&id=' + id)
 //  提交评审意见

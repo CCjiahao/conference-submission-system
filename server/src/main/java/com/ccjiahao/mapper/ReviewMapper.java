@@ -16,4 +16,9 @@ public interface ReviewMapper extends BaseMapper<Review> {
         if (reviews.size() == 0) return null;
         else return reviews.get(0);
     }
+    public default List<Review> selectReviewByReviewer(String reviewer) {
+        HashMap<String, Object> queryMap = new HashMap<>();
+        queryMap.put("reviewer", reviewer);
+        return this.selectByMap(queryMap);
+    }
 }
