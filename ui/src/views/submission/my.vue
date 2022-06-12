@@ -1,12 +1,84 @@
 <template>
-    <div>
+    <div style="margin-bottom: 20px">
         <b>我的投稿记录</b>
-        
+        <p>请及时跟进论文进度，避免错过重要信息。</p>
+    </div>
+    <div style="padding: 30px 100px;">
+        <a-table bordered :data-source="dataSource" :columns="columns" style="width: 100%;">
+            <template #bodyCell="{ column, text, record }">
+                <template v-if="column.dataIndex === 'name'">
+                    {{ text || ' ' }}
+                </template>
+                <template v-else-if="column.dataIndex === 'operation'">
+                    <a :href="'http://localhost:8081/api/download?uuid=' + record.paper" target="_blank">下载</a>
+                    <a-divider v-if="record.state == '待辩论'" type="vertical" />
+                    <router-link v-if="record.state == '待辩论'"
+                        :to="{ path: '/review/detail', query: { id: record.id } }">查看审阅材料</router-link>
+                    <a-divider v-if="record.state == '中选'" type="vertical" />
+                    <router-link v-if="record.state == '中选'" :to="{ path: '/review/detail', query: { id: record.id } }">
+                        提交最终版论文</router-link>
+                    <a-divider v-if="record.state == '待审核' || record.state == '未中选'" type="vertical" />
+                    <a-popconfirm v-if="record.state == '待审核' || record.state == '未中选'" title="Sure to delete?"
+                        @confirm="onDelete(record.key)">
+                        <a>删除</a>
+                    </a-popconfirm>
+                </template>
+            </template>
+        </a-table>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref } from 'vue'
+import type { Ref } from 'vue';
+import { GetPapersApi } from '@/request/api';
+import { number } from 'vue-types';
+
+interface PaperItem {
+    id: number,
+    title: string,
+    expertise: string,
+    paper: string,
+    commitTime: string;
+    state: string;
+}
+const columns = [
+    {
+        title: '论文编号',
+        dataIndex: 'id',
+    },
+    {
+        title: '论文标题',
+        dataIndex: 'title',
+    },
+    {
+        title: '论文领域',
+        dataIndex: 'expertise',
+    },
+    {
+        title: '投稿时间',
+        dataIndex: 'commitTime',
+    },
+    {
+        title: '状态',
+        dataIndex: 'state',
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+    },
+];
+const dataSource: Ref<PaperItem[]> = ref([]);
+
+GetPapersApi().then((res: any) => {
+    if (res.errno === 0) {
+        dataSource.value = res.data['papers'];
+    }
+})
+
+const onDelete = (key: string) => {
+    // dataSource.value = dataSource.value.filter(item => item.id !== key);
+};
 </script>
 
 <style scoped lang="scss">

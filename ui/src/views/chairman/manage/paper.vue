@@ -6,61 +6,59 @@
 <script lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { defineComponent } from 'vue';
-import axios from 'axios';
+import { GetPapersApi } from '@/request/api';
 
 const columns = [
     {
-    title: '论文编号',
-    dataIndex: 'id',
-    key: 'id',
+        title: '论文编号',
+        dataIndex: 'id',
+        key: 'id',
     },
     {
-    title: '论文标题',
-    dataIndex: 'title',
-    key: 'title',
+        title: '论文标题',
+        dataIndex: 'title',
+        key: 'title',
     },
     {
-    title: '投稿时间',
-    dataIndex: 'commitTime',
-    key: 'commitTime',
+        title: '投稿时间',
+        dataIndex: 'commitTime',
+        key: 'commitTime',
     },
     {
-    title: '归属类别',
-    dataIndex: 'expertise',
-    key: 'expertise',
+        title: '归属类别',
+        dataIndex: 'expertise',
+        key: 'expertise',
     },
     {
-    title: '负责人',
-    dataIndex: 'manInCharge',
-    key: 'manInCharge',
+        title: '负责人',
+        dataIndex: 'manInCharge',
+        key: 'manInCharge',
     },
     {
-    title: '状态',
-    dataIndex: 'state',
-    key: 'state',
+        title: '状态',
+        dataIndex: 'state',
+        key: 'state',
     },
     {
-    title: 'Action',
-    key: 'action',
+        title: 'Action',
+        key: 'action',
     },
 ];
 
 export default defineComponent({
     data() {
         return {
-            papers:[]
+            papers: []
         }
     },
     methods: {
-        getPapers(){
-          axios({
-              url:"http://localhost:8081/api/getPapers",
-              method:'GET',
-          }).then(res=>{
-              console.log(res.data);
-              this.papers= res.data;
-          })
-      }
+        getPapers() {
+            GetPapersApi().then((res: any) => {
+                if (res.errno === 0) {
+                    this.papers = res.data['papers'];
+                }
+            })
+        }
     },
     mounted() {
         // 调用请求数据的方法

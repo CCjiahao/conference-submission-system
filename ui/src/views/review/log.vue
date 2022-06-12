@@ -1,6 +1,6 @@
 <template>
-<h2>审稿记录</h2>
- <!-- <a-button type="primary" @click="getPapers()">获取论文</a-button> -->
+  <h2>审稿记录</h2>
+  <!-- <a-button type="primary" @click="getPapers()">获取论文</a-button> -->
   <a-table :columns="columns" :data-source="papers">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'id'">
@@ -12,17 +12,17 @@
 
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'title'">
-          <!--每篇文章都有对应的detail页，辩论页，编辑审阅页-->
-        <router-link :to="{ path: '/review/detail', query: { id: record.id }} ">
+        <!--每篇文章都有对应的detail页，辩论页，编辑审阅页-->
+        <router-link :to="{ path: '/review/detail', query: { id: record.id } }">
           {{ record.title }}
         </router-link>
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
-            <!--下载请求-->
-          <a :href="'http://localhost:8081/api/download?uuid='+record.paper" target="_blank">下载文章</a>
+          <!--下载请求-->
+          <a :href="'http://localhost:8081/api/download?uuid=' + record.paper" target="_blank">下载文章</a>
           <a-divider type="vertical" />
-          <router-link :to="{ path: '/review/edit', query: { id: record.id }} ">编辑审阅</router-link>
+          <router-link :to="{ path: '/review/edit', query: { id: record.id } }">编辑审阅</router-link>
           <a-divider type="vertical" />
           <a>查看辩论</a>
         </span>
@@ -35,7 +35,7 @@
 import { ref, reactive, computed } from 'vue';
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { defineComponent } from 'vue';
-import axios from 'axios';
+import { GetPapersApi } from '@/request/api';
 
 const columns = [
   {
@@ -66,34 +66,34 @@ const columns = [
 
 const data = [
   {
-      id:'1',
-      title:'第一篇论文',
-      commit_time:'12:00',
-      state:'待审阅'
+    id: '1',
+    title: '第一篇论文',
+    commit_time: '12:00',
+    state: '待审阅'
   },
   {
-      id:'2',
-      title:'第二篇论文',
-      commit_time:'12:00',
-      state:'待审阅'
+    id: '2',
+    title: '第二篇论文',
+    commit_time: '12:00',
+    state: '待审阅'
   },
   {
-      id:'3',
-      title:'第三篇论文',
-      commit_time:'12:00',
-      state:'待审阅'
+    id: '3',
+    title: '第三篇论文',
+    commit_time: '12:00',
+    state: '待审阅'
   },
   {
-      id:'4',
-      title:'第四篇论文',
-      commit_time:'12:00',
-      state:'待审阅'
+    id: '4',
+    title: '第四篇论文',
+    commit_time: '12:00',
+    state: '待审阅'
   },
   {
-      id:'5',
-      title:'第五篇论文',
-      commit_time:'12:00',
-      state:'待审阅'
+    id: '5',
+    title: '第五篇论文',
+    commit_time: '12:00',
+    state: '待审阅'
   }
 ];
 
@@ -102,26 +102,24 @@ export default defineComponent({
     SmileOutlined,
     DownOutlined,
   },
-  data(){
-    return{
-      papers:[]
+  data() {
+    return {
+      papers: []
     }
   },
-  methods:{
-      getPapers(){
-          axios({
-              url:"http://localhost:8081/api/getPapers",
-              method:'GET',
-          }).then(res=>{
-              console.log(res.data);
-              this.papers= res.data;
-          })
-      }
-  },
-    mounted() {
-        // 调用请求数据的方法
-        this.getPapers()
+  methods: {
+    getPapers() {
+      GetPapersApi().then((res: any) => {
+        if (res.errno === 0) {
+          this.papers = res.data['papers'];
+        }
+      })
     }
+  },
+  mounted() {
+    // 调用请求数据的方法
+    this.getPapers()
+  }
   ,
   setup() {
     return {

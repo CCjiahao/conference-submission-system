@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 @CrossOrigin(origins = {"*", "null"})
@@ -38,16 +40,17 @@ public class PaperController {
         return Feedback.info(null);
     }
 
-    private Gson gson=new Gson();
     @GetMapping("/api/getPapers")
     public String getPapers(){
-        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
-        return gson.toJson(papers);
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("papers", paperMapper.selectList(null));
+        return Feedback.info(data);
     }
 
     @GetMapping("api/getPaperById")
     public String getPaperById(@RequestParam String id){
-        com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);
-        return gson.toJson(paper);
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("paper", paperMapper.selectPaperById(id));
+        return Feedback.info(data);
     }
 }
