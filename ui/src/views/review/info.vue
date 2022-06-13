@@ -36,7 +36,7 @@
 <a-row :span="12" :wrap="true">
 <div class="toProcess" v-for="item in papers" v-bind:key="item">
 <a-col :span="4">
-<a-card  style="width: 300px; height:200px">
+<a-card  style="width: 300px; height:197px; white-space: no-warp; display:inline-block; overflow:hidden; text-overflow:ellipsis">
 <template #title>{{item.title}}</template>
 <template #extra><router-link :to="{ path: '/review/detail', query: { id: item.id } }">查看</router-link></template>
 <p>{{item.abstracts}}</p>
