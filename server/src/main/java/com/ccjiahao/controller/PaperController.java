@@ -8,9 +8,7 @@ import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
-import com.ccjiahao.mapper.VerificationCodeMapper;
 import com.ccjiahao.utils.TokenUtils;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -26,3 +26,7 @@ export const GetReviewedPapersByReviewerApi = (token: string) => instance.get('h
 export const DeletePaperByIdApi = (token: string, id: number) => instance.get('http://localhost:8081/api/deletePaperById?token=' + token + '&id=' + id)
 //  提交评审意见
 export const SubmitReviewApi = (token: string, paperId: string, isAssociated: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/submitReview', { token: token, paperId: paperId, isAssociated: isAssociated, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })
+// 根据paperid获取review
+export const GetReviewByPaperIdApi = (paperid: string) => instance.get('http://localhost:8081/api/getReviewByPaperId?paperid=' + paperid)
+// 提交rebuttal
+export const SubmitRebuttalApi = (token: string, reviewer: string, paperId: string, content: string) => instance.post('/api/submitRebuttal', { token: token, reviewer: reviewer, paperId: paperId, content: content })

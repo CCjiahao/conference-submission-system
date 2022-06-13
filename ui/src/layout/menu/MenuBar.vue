@@ -65,12 +65,14 @@ const router = useRoute()
 // 定义路由对应的key
 var routeMap: { [key: string]: [string, string]; } = {
     "/submission/my" : ["submission", "my_submission"],
+    "/submission/rebuttal" : ["submission", "my_submission"],
     "/submission/new" : ["submission", "new_submission"],
     "/review/info" : ["review", "review_info"],
     "/review/hall" : ["review", "review_hall"],
     "/review/log" : ["review", "review_log"],
-    "/review/detail":["review","review_detail"],
-    "/review/edit":["review","review_edit"],
+    "/review/review" : ["review", "review_log"],
+    "/review/detail":["review","review_log"],
+    "/review/edit":["review","review_log"],
     "/chairman/index" : ["chairman", "chairman_index"],
     "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
     "/chairman/manage/paper" : ["chairman", "chairman_manage_paper"],

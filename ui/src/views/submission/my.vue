@@ -13,9 +13,9 @@
                     <a :href="'http://localhost:8081/api/download?uuid=' + record.paper" target="_blank">下载</a>
                     <a-divider v-if="record.state == '待辩论'" type="vertical" />
                     <router-link v-if="record.state == '待辩论'"
-                        :to="{ path: '/review/detail', query: { id: record.id } }">查看审阅材料</router-link>
+                        :to="{ path: '/submission/rebuttal', query: { id: record.id } }">查看审阅材料</router-link>
                     <a-divider v-if="record.state == '中选'" type="vertical" />
-                    <router-link v-if="record.state == '中选'" :to="{ path: '/review/detail', query: { id: record.id } }">
+                    <router-link v-if="record.state == '中选'" :to="{ path: '/submission/rebuttal', query: { id: record.id } }">
                         提交最终版论文</router-link>
                     <a-divider v-if="record.state == '待审核' || record.state == '未中选'" type="vertical" />
                     <a-popconfirm v-if="record.state == '待审核' || record.state == '未中选'" title="确认删除?"
