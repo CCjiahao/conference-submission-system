@@ -1,5 +1,5 @@
 <template>
-    <h2>审稿记录</h2>
+    <h2>审稿大厅</h2>
     <a-table :columns="columns" :data-source="papers">
         <template #headerCell="{ column }">
             <template v-if="column.key === 'id'">
@@ -42,6 +42,11 @@ const columns = [
         title: '论文标题',
         dataIndex: 'title',
         key: 'title',
+    },
+    {
+        title: '论文分类',
+        dataIndex: 'expertise',
+        key: 'expertise',
     },
     {
         title: '提交时间',

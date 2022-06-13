@@ -54,6 +54,11 @@ const columns = [
         key: 'title',
     },
     {
+        title: '论文分类',
+        dataIndex: 'expertise',
+        key: 'expertise',
+    },
+    {
         title: '提交时间',
         dataIndex: 'commitTime',
         key: 'commitTime',
