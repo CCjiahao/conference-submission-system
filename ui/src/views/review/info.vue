@@ -24,80 +24,79 @@
   </a-col>
   <a-col :span="8">
       <a-row>
-      <h2>审稿数:20</h2>
+      <h2>审稿数:{{numOfReviewed}}</h2>
       <a-divider type="vertical" style="height: 35px; background-color: #7cb305" />
-      <h2>待审稿数:10</h2>
+      <h2>待审稿数:{{numOfReview}}</h2>
       </a-row>
   </a-col>
 </a-row>
 </a-descriptions>
 <br>
 <h1>审核中的稿件</h1>
-<div class="toProcess">
-<a-row :gutter="[8,16]">
-  <a-col :span="4" :offset="3">
-      <a-card title="第一篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-  <a-col :span="4">
-      <a-card title="第二篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-  <a-col :span="4">
-      <a-card title="第三篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-</a-row>
-<a-row :gutter="[8,16]">
-  <a-col :span="4" :offset="3">
-      <a-card title="第四篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-  <a-col :span="4">
-      <a-card title="第五篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-  <a-col :span="4">
-      <a-card title="第六篇论文" style="width: 300px">
-    <template #extra><a href="#">查看</a></template>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-    <p>这是一段描述</p>
-  </a-card>
-  </a-col>
-</a-row>
-</div>
+<a-row :span="12" :wrap="true">
+<div class="toProcess" v-for="item in papers" v-bind:key="item">
+<a-col :span="4">
+<a-card  style="width: 300px; height:200px">
+<template #title>{{item.title}}</template>
+<template #extra><router-link :to="{ path: '/review/detail', query: { id: item.id } }">查看</router-link></template>
+<p>{{item.abstracts}}</p>
+</a-card>
+</a-col>
 
+</div>
+</a-row>
 
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+<script lang="ts">
+import { ref, reactive, computed,defineComponent } from 'vue';
 import { userStore } from '../../store/user';
 import { useRouter } from 'vue-router';
+import { GetPapersByReviewerApi,GetReviewedPapersByReviewerApi } from '@/request/api';
 
-const store = userStore()
-const user = store.getState
+const store = userStore();
+const user = store.getState;
+
+export default defineComponent({
+  components:{
+  },
+  data(){
+    return {
+      // 待审稿件数
+      // 审稿数
+      numOfReview:0,
+      numOfReviewed:0,
+      // 审核中的论文
+      papers:[]
+    }
+  },
+  methods:{
+    getPapers() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                GetPapersByReviewerApi(token).then((res: any) => {
+                    if (res.errno === 0) {
+                        this.numOfReview = res.data['papers'].length;
+                    }
+                });
+                GetReviewedPapersByReviewerApi(token).then((res: any) => {
+                    if (res.errno === 0) {
+                        this.papers = res.data['papers'];
+                        this.numOfReviewed = res.data['papers'].length;
+                    }
+                });
+            }
+        }
+  },
+  mounted(){
+    this.getPapers();
+  },
+  setup(){
+    return{
+      user
+    }
+  }
+});
 
 </script>
 
