@@ -1,42 +1,46 @@
 <template>
     <h2>用户管理界面</h2>
     <a-table :dataSource="users" :columns="columns" >
-        <template #bodyCell="{ column }">
-            <template v-if="column.key === 'action'">
-                <span>
-                    <a @click="showModal">编辑</a>
-                    <a-modal centered v-model:visible="visible" title="编辑用户信息" @ok="handleOk">
-                        <a-form
-                            :model="formState"
-                            v-bind="layout"
-                            name="nest-messages"
-                            :validate-messages="validateMessages"
-                            @finish="onFinish"
-                        >
-                            <a-form-item :name="['user', 'name']" label="Name" :rules="[{ required: true }]">
-                            <a-input v-model:value="formState.user.name" />
-                            </a-form-item>
-                            <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
-                            <a-input v-model:value="formState.user.email" />
-                            </a-form-item>
-                            <a-form-item :name="['user', 'age']" label="Age" :rules="[{ type: 'number', min: 0, max: 99 }]">
-                            <a-input-number v-model:value="formState.user.age" />
-                            </a-form-item>
-                            <a-form-item :name="['user', 'website']" label="Website">
-                            <a-input v-model:value="formState.user.website" />
-                            </a-form-item>
-                            <a-form-item :name="['user', 'introduction']" label="Introduction">
-                            <a-textarea v-model:value="formState.user.introduction" />
-                            </a-form-item>
-                            <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
-                            <a-button type="primary" html-type="submit">Submit</a-button>
-                            </a-form-item>
-                        </a-form>
-                    </a-modal>
-                </span>
+        <template #bodyCell="{ column,record }">
+            <template v-if="column.key === 'action'" >
+                <a @click="showModal();see(record)">编辑</a>
             </template>
         </template>
     </a-table>
+    <a-modal centered v-model:visible="visible" title="编辑用户信息" @ok="handleOk">
+        <a-form
+            :model="formState"
+            v-bind="layout"
+            name="nest-messages"
+            :validate-messages="validateMessages"
+            @finish="onFinish"
+        >
+            <a-form-item :name="['user', 'username']" label="用户名" :rules="[{ required: true }]">
+                <a-input disabled="true" v-model:value="formState.user.name" />                            
+            </a-form-item>
+            <a-form-item :name="['user', 'name']" label="姓名" :rules="[{ required: true }]">
+            <a-input v-model:value="formState.user.name" />
+            </a-form-item>
+            <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
+            <a-input v-model:value="formState.user.email" />
+            </a-form-item>
+            <a-form-item :name="['user', 'school']" label="组织" :rules="[{ required: true }]">
+            <a-input-number v-model:value="formState.user.school" />
+            </a-form-item>
+            <a-form-item :name="['user', 'country']" label="国家/地区">
+            <a-input v-model:value="formState.user.country" />
+            </a-form-item>
+            <a-form-item :name="['user', 'role']" label="角色">
+            <a-textarea v-model:value="formState.user.role" />
+            </a-form-item>
+            <a-form-item :name="['user', 'expertise']" label="归属组别">
+            <a-textarea v-model:value="formState.user.expertise" />
+            </a-form-item>
+            <!-- <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
+            <a-button type="primary" html-type="submit">Submit</a-button>
+            </a-form-item> -->
+        </a-form>
+    </a-modal>
 </template>
 
 <script lang="ts">
@@ -66,7 +70,7 @@ const columns = [
     key: 'school',
     },
     {
-    title: '国家',
+    title: '国家/地区',
     dataIndex: 'country',
     key: 'country',
     },
@@ -82,9 +86,22 @@ const columns = [
     },
     {
     title: '操作',
+    dataIndex: 'action',
     key: 'action',
     },
 ];
+
+const formState = reactive({
+    user: {
+        username: '',
+        name: '',
+        email: '',
+        school: '',
+        country: '',
+        role: '',
+        expertise: '',
+    },
+});
 
 export default defineComponent({
     data() {
@@ -94,14 +111,18 @@ export default defineComponent({
     },
     methods: {
         getUsers(){
-          axios({
-              url:"http://localhost:8081/api/getUsers",
-              method:'GET',
-          }).then(res=>{
-              console.log(res.data);
-              this.users= res.data;
-          })
-      }
+            axios({
+                url:"http://localhost:8081/api/getUsers",
+                method:'GET',
+            }).then(res=>{
+                console.log(res.data);
+                this.users= res.data;
+            })
+        },
+        see(value: any){
+            console.log(value);
+            formState.user = value;
+        }
     },
     mounted() {
         // 调用请求数据的方法
@@ -131,19 +152,9 @@ export default defineComponent({
         };
 
         const layout = {
-            labelCol: { span: 8 },
+            labelCol: { span: 4 },
             wrapperCol: { span: 16 },
         };
-
-        const formState = reactive({
-            user: {
-                name: '',
-                age: undefined,
-                email: '',
-                website: '',
-                introduction: '',
-            },
-        });
 
         const onFinish = (values: any) => {
             console.log('Success:', values);
