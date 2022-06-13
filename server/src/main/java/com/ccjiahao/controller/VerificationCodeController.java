@@ -3,6 +3,7 @@ package com.ccjiahao.controller;
 import com.ccjiahao.dto.Feedback;
 import com.ccjiahao.entity.User;
 import com.ccjiahao.entity.VerificationCode;
+import com.ccjiahao.mapper.UserMapper;
 import com.ccjiahao.mapper.VerificationCodeMapper;
 import com.ccjiahao.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import java.util.Random;
 @RestController
 public class VerificationCodeController {
     private final VerificationCodeMapper verificationCodeMapper;
+    private final UserMapper userMapper;
     private final EmailUtils emailUtils;
     @Autowired
-    public VerificationCodeController(VerificationCodeMapper verificationCodeMapper, EmailUtils emailUtils) {
+    public VerificationCodeController(UserMapper userMapper, VerificationCodeMapper verificationCodeMapper, EmailUtils emailUtils) {
+        this.userMapper = userMapper;
         this.verificationCodeMapper = verificationCodeMapper;
         this.emailUtils = emailUtils;
     }
@@ -36,6 +39,17 @@ public class VerificationCodeController {
             return Feedback.info(null);
         } catch (Exception e) {
             return Feedback.error(e.toString());
+        }
+    }
+
+    @GetMapping("/api/getVerificationCodeByUsernameAndEmail")
+    public String getVerificationCodeByUsernameAndEmail(@RequestParam String username, @RequestParam String email){
+        User user = userMapper.selectUserByUsername(username);
+        if(user.getEmail().equals(email)) {
+            return getVerificationCode(email);
+        }
+        else{
+            return Feedback.error("用户名与邮箱不匹配！");
         }
     }
 }

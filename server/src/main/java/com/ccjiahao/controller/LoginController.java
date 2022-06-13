@@ -1,6 +1,7 @@
 package com.ccjiahao.controller;
 
 import com.ccjiahao.dto.Feedback;
+import com.ccjiahao.dto.Forget;
 import com.ccjiahao.dto.Login;
 import com.ccjiahao.dto.Register;
 import com.ccjiahao.entity.User;
@@ -54,6 +55,23 @@ public class LoginController {
         }
         user = new User(register.getUsername(), register.getName(), register.getPassword(), register.getEmail(), register.getSchool(), register.getCountry(), register.getExpertise(), "researcher");
         userMapper.insert(user);
+        return Feedback.info(null);
+    }
+
+    @PostMapping("/api/forget")
+    public String forget(@RequestBody Forget forget){
+        User user = userMapper.selectUserByUsername(forget.getUsername());
+        if(user == null) {
+            return Feedback.error("该用户不存在！");
+        }
+        if(!user.getEmail().equals(forget.getEmail())) {
+            return Feedback.error("邮箱与用户名不对应！");
+        }
+        if(!verificationCodeMapper.selectByEmailAndCodeAndTime(forget.getEmail(), forget.getCode())) {
+            return Feedback.error("验证码过期或不正确！");
+        }
+        user.setPassword(forget.getPassword());
+        userMapper.updateByUsername(user);
         return Feedback.info(null);
     }
 }
