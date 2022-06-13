@@ -156,7 +156,7 @@ const addCollaborator = () => {
             if (res.errno === 0) {
                 const user = res.data['user'];
                 if(user.role == 'chairman') {
-                    message.error("会议主席不能够作为协作人")
+                    message.error("期刊主席不能够作为协作人")
                     return;
                 }
                 const newData = {

@@ -13,7 +13,7 @@
   </div>
   <a-col offset="1">
     <a-form :model="ReviewState" :label-col="labelCol" :wrapper-col="wrapperCol" layout='vertical'>
-      <a-form-item label="1.是否符合本会议议题?">
+      <a-form-item label="1.是否符合本期刊议题?">
         <a-col offset="1">
           <a-radio-group v-model:value="ReviewState.isAssociated" name="radioGroup">
             <a-radio value="不符合">不符合</a-radio>

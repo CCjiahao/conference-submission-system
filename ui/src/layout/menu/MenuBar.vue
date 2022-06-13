@@ -34,9 +34,9 @@
                 <template #icon>
                     <team-outlined />
                 </template>
-                <template #title>会议主席</template>
+                <template #title>期刊主席</template>
                 <a-menu-item key="chairman_index">
-                    <router-link to="/chairman/index">会议主席首页</router-link>
+                    <router-link to="/chairman/index">期刊主席首页</router-link>
                 </a-menu-item>
                 <a-menu-item key="chairman_manage_user">
                     <router-link to="/chairman/manage/user">用户管理界面</router-link>

@@ -1,7 +1,7 @@
 <template>
     <div class="logo">
         <img src="@/assets/logo.png" />
-        <span v-show="show" class="title">ECNU会议投稿系统</span>
+        <span v-show="show" class="title">ECNU期刊投稿系统</span>
     </div>
 </template>
 

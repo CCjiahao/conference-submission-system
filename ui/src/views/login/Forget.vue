@@ -3,7 +3,7 @@
         <a-col :span="5">
             <div class="logo">
                 <img src="@/assets/logo.png" />
-                <span class="title">ECNU会议投稿系统</span>
+                <span class="title">ECNU期刊投稿系统</span>
             </div>
             <p style="text-align: center;">East China Normal University 求实创造，为人师表</p>
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"

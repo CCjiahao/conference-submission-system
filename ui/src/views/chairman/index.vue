@@ -1,5 +1,5 @@
 <template>
-<div>会议主席首页</div>
+<div>期刊主席首页</div>
 </template>
 
 <script setup lang="ts">
