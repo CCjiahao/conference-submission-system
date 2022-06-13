@@ -60,10 +60,11 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue';
 import { GetVerificationCodeApi } from '@/request/api'
-import { message, SelectProps } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 import countrys from '@/variable/countrys'
 import { RegisterApi } from '@/request/api'
 import { useRouter } from 'vue-router';
+import { checkEmail } from '@/utils/index'
 
 interface FormState {
     username: string;
@@ -121,6 +122,10 @@ const onFinishFailed = (errorInfo: any) => {
 
 const getCode = () => {
     // 这里没有验证有效性，默认有效
+    if(!checkEmail(formState.email)) {
+        message.error('邮箱格式不正确，请重新输入');
+        return;
+    }
     GetVerificationCodeApi(formState.email).then((res: any) => {
         if (res.errno === 0) {
             message.info('验证码发送成功，请在十分钟内使用');
