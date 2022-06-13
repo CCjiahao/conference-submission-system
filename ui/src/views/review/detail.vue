@@ -1,21 +1,44 @@
 <template>
-    <h2>文章详情</h2>
-    <div>论文编号:{{ paper.id }}</div>
-    <div>论文标题:{{ paper.title }}</div>
-    <div>论文摘要:{{ paper.abstracts }}</div>
-    <a :href="'http://localhost:8081/api/download?uuid=' + paper.paper" target="_blank">下载论文</a>
+<h2>文章详情</h2>
+  <a-divider />
+    <a-col :offset="1">
+    <div style="width:550px">
     <br>
-    <a-button type="primary" @click="goBack">返回</a-button>
-    <a-button v-if="paper.state==='待审核'" type="primary" @click="goReview(paper.id)">审阅</a-button>
+    <p><span style="font-weight:bold">论文编号:</span>{{ paper.id }}</p>
+    <p><span style="font-weight:bold">论文标题:</span>{{ paper.title }}</p>
+    <p><span style="font-weight:bold">论文分类:</span>{{paper.expertise}}</p>
+    <p><span style="font-weight:bold">提交时间:</span>{{paper.commitTime}}</p>
+    <p><span style="font-weight:bold">论文摘要:</span><br>{{ paper.abstracts }}</p>
+    <br><br>
+    </div>
+    </a-col>
+    <a-row>
+        <a-col :span="3" :offset="1">
+            <a-button type="primary" :size="size" @click="downPaperById(paper.paper)">
+                <template #icon>
+                    <DownloadOutlined />
+                </template>
+                下载论文
+                </a-button>
+        </a-col>
+        <a-col :span="4">
+            <a-button @click="goBack">返回</a-button>
+        </a-col>
+        <a-col :span="4">
+            <a-button v-if="paper.state==='待审核'" type="primary" @click="goReview(paper.id)">审阅</a-button>
+        </a-col>
+    </a-row>
 </template>
 
 <script lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { defineComponent } from 'vue';
 import { GetPapersByIdApi } from '@/request/api';
+import { DownloadOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
     components: {
+        DownloadOutlined,
     },
     data() {
         return {
@@ -36,6 +59,9 @@ export default defineComponent({
         },
         goReview(id: any) {
             this.$router.push({ path: "/review/edit", query: { id: id } });
+        },
+        downPaperById(paperId:any){
+            window.location.href = 'http://localhost:8081/api/download?uuid=' + paperId;
         }
     },
     mounted() {
