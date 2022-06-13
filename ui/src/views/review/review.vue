@@ -9,10 +9,10 @@
         <div style="margin: 5px 0px;">创新性得分: {{ review.innovation }}</div>
         <div style="margin: 5px 0px;">接收意见: {{ review.passOrReject }}</div>
         <div style="margin: 5px 0px;">评审意见: {{ review.suggestion }}</div>
-        <a-form-item name="rebuttal" @v-if="author">
+        <a-form-item name="rebuttal" v-if="author">
             <a-textarea v-model:value="paperState.rebuttal" placeholder="你的辩论内容" />
         </a-form-item>
-        <a-button type="primary" @click="onFinish" style="margin-top: 10px" @v-if="author">提交辩论结果</a-button>
+        <a-button type="primary" @click="onFinish" style="margin-top: 10px" v-if="author">提交辩论结果</a-button>
         <a-button @click="goBack" style="margin-top: 10px">返回</a-button>
     </a-form>
 </template>
