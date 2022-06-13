@@ -5,10 +5,12 @@ import com.ccjiahao.dto.Register;
 import com.ccjiahao.entity.Paper;
 import com.ccjiahao.entity.Rebuttal;
 import com.ccjiahao.entity.Review;
+import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.RebuttalMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
+import com.ccjiahao.utils.EmailUtils;
 import com.ccjiahao.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,19 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"*", "null"})
 @RestController
 public class RebuttalController {
+    private final UserMapper userMapper;
     private final RebuttalMapper rebuttalMapper;
     private final PaperMapper paperMapper;
     private final ReviewMapper reviewMapper;
+    private final EmailUtils emailUtils;
     @Autowired
-    public RebuttalController(RebuttalMapper rebuttalMapper, UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper) {
+    public RebuttalController(UserMapper userMapper, RebuttalMapper rebuttalMapper, PaperMapper paperMapper, ReviewMapper reviewMapper, EmailUtils emailUtils) {
+        this.userMapper = userMapper;
         this.rebuttalMapper = rebuttalMapper;
         this.paperMapper = paperMapper;
         this.reviewMapper = reviewMapper;
+        this.emailUtils = emailUtils;
     }
-
 
     @PostMapping("/api/submitRebuttal")
     public String submitRebuttal(@RequestBody com.ccjiahao.dto.Rebuttal rebuttal) {
@@ -46,6 +51,8 @@ public class RebuttalController {
             rebuttalMapper.insert(rebuttal_);
             paper.setState("已辩论");
             paperMapper.updateById(paper);
+            User user = userMapper.selectUserByUsername(username);
+            emailUtils.sendReReviewRemain(user.getEmail(), paper.getUsername(), paper.getTitle());
             return Feedback.info(null);
         } catch (Exception e) {
             return Feedback.error(e.toString());

@@ -8,6 +8,7 @@ import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
+import com.ccjiahao.utils.EmailUtils;
 import com.ccjiahao.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,13 @@ public class PaperController {
     private final UserMapper userMapper;
     private final PaperMapper paperMapper;
     private final ReviewMapper reviewMapper;
+    private final EmailUtils emailUtils;
     @Autowired
-    public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper) {
+    public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper, EmailUtils emailUtils) {
         this.userMapper = userMapper;
         this.paperMapper = paperMapper;
         this.reviewMapper = reviewMapper;
+        this.emailUtils = emailUtils;
     }
 
     @PostMapping("/api/submitPaper")
@@ -33,6 +36,14 @@ public class PaperController {
             String username = TokenUtils.getUserByToken(paper.getToken());
             com.ccjiahao.entity.Paper paper1 = new com.ccjiahao.entity.Paper(0, username, paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCollaborators(), paper.getPaper(), new Date(System.currentTimeMillis()), "待审核");
             paperMapper.insert(paper1);
+            List<User> users = userMapper.selectList(null);
+            List<String> emails = new ArrayList<String>();
+            for(User user : users) {
+                if (user.getRole().equals("chairman") || (user.getRole().equals("reviewer") && user.isExpertise(paper.getExpertise()) && !paper1.isAuthor(username))) {
+                    emails.add(user.getEmail());
+                }
+            }
+            emailUtils.sendReviewRemain(emails.toArray(String[]::new), username, paper.getTitle());
         } catch (Exception e) {
             return Feedback.error("Token失效！");
         }
