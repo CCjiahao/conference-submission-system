@@ -16,7 +16,7 @@
             @finish="onFinish"
         >
             <a-form-item :name="['user', 'username']" label="用户名" :rules="[{ required: true }]">
-                <a-input disabled="true" v-model:value="formState.user.name" />                            
+                <a-input disabled="true" v-model:value="formState.user.username" />                            
             </a-form-item>
             <a-form-item :name="['user', 'name']" label="姓名" :rules="[{ required: true }]">
             <a-input v-model:value="formState.user.name" />
