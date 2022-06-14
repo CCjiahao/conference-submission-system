@@ -108,12 +108,8 @@ const getUsers = () => {
     users.value = []
     GetUsers().then((res: any) => {
         if (res.errno === 0) {
-            for (var i = 0; i < res.data['users'].length; i++) {
-                const user = res.data['users'][i];
-                if (user.role != 'chairman') {
-                    users.value.push(user);
-                }
-            }
+            users.value = res.data['users'];
+            
         }
     })
 }
