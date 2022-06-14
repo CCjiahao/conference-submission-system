@@ -42,7 +42,13 @@ public class ReviewController {
             paper.setState("待辩论");
             paperMapper.updateById(paper);
             reviewMapper.insert(review1);
-            List<String> names = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+            List<String> names;
+            if(paper.getCollaborators().equals("")) {
+                names = new ArrayList<>();
+            }
+            else{
+                names = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+            }
             List<String> emails = new ArrayList<>();
             names.add(paper.getUsername());
             for (String name: names) {
@@ -58,8 +64,12 @@ public class ReviewController {
 
     @GetMapping("api/getReviewByPaperId")
     public String getReviewByPaperId(@RequestParam String paperid){
+        com.ccjiahao.entity.Review review = reviewMapper.selectReviewByPaperId(paperid);
+        if (review == null) {
+            return Feedback.error("该审核意见不存在");
+        }
         Dictionary<String, Object> data = new Hashtable<>();
-        data.put("review", reviewMapper.selectReviewByPaperId(paperid));
+        data.put("review", review);
         return Feedback.info(data);
     }
 

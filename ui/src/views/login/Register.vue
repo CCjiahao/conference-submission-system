@@ -37,7 +37,7 @@
                     <a-input-password v-model:value="formState.password" placeholder="密码" />
                 </a-form-item>
 
-                <a-form-item name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
+                <a-form-item name="email" :rules="[{ required: true, message: '请输入邮箱!' }, {type: 'email'}]">
                     <a-input v-model:value="formState.email" placeholder="邮箱" />
                 </a-form-item>
 

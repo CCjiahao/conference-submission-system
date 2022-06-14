@@ -1,8 +1,6 @@
 package com.ccjiahao.controller;
 
-import com.ccjiahao.dto.Feedback;
-import com.ccjiahao.dto.Login;
-import com.ccjiahao.dto.Paper;
+import com.ccjiahao.dto.*;
 import com.ccjiahao.entity.Review;
 import com.ccjiahao.entity.User;
 import com.ccjiahao.mapper.PaperMapper;
@@ -22,6 +20,7 @@ public class PaperController {
     private final PaperMapper paperMapper;
     private final ReviewMapper reviewMapper;
     private final EmailUtils emailUtils;
+
     @Autowired
     public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper, EmailUtils emailUtils) {
         this.userMapper = userMapper;
@@ -38,7 +37,7 @@ public class PaperController {
             paperMapper.insert(paper1);
             List<User> users = userMapper.selectList(null);
             List<String> emails = new ArrayList<String>();
-            for(User user : users) {
+            for (User user : users) {
                 if (user.getRole().equals("chairman") || (user.getRole().equals("reviewer") && user.isExpertise(paper.getExpertise()) && !paper1.isAuthor(username))) {
                     emails.add(user.getEmail());
                 }
@@ -51,21 +50,21 @@ public class PaperController {
     }
 
     @GetMapping("/api/getPapers")
-    public String getPapers(){
+    public String getPapers() {
         Dictionary<String, Object> data = new Hashtable<>();
         data.put("papers", paperMapper.selectList(null));
         return Feedback.info(data);
     }
 
     @GetMapping("api/getPaperById")
-    public String getPaperById(@RequestParam String id){
+    public String getPaperById(@RequestParam String id) {
         Dictionary<String, Object> data = new Hashtable<>();
         data.put("paper", paperMapper.selectPaperById(id));
         return Feedback.info(data);
     }
 
     @GetMapping("api/getPapersByAuthor")
-    public String getPapersByAuthor(@RequestParam String author){
+    public String getPapersByAuthor(@RequestParam String author) {
         Dictionary<String, Object> data = new Hashtable<>();
         data.put("papers", paperMapper.selectPaperByAuthor(author));
         return Feedback.info(data);
@@ -76,13 +75,13 @@ public class PaperController {
         try {
             String username = TokenUtils.getUserByToken(token);
             User user = userMapper.selectUserByUsername(username);
-            if(user == null) {
+            if (user == null) {
                 return Feedback.error("该用户不存在");
             }
             List<com.ccjiahao.entity.Paper> papers = paperMapper.selectPaperByState("待审核");
             List<com.ccjiahao.entity.Paper> true_papers = new ArrayList<>();
-            for (com.ccjiahao.entity.Paper paper:papers) {
-                if(user.isExpertise(paper.getExpertise()) && !paper.isAuthor(username)) {
+            for (com.ccjiahao.entity.Paper paper : papers) {
+                if (user.isExpertise(paper.getExpertise()) && !paper.isAuthor(username)) {
                     true_papers.add(paper);
                 }
             }
@@ -130,5 +129,27 @@ public class PaperController {
         } catch (Exception e) {
             return Feedback.error("token失效！");
         }
+    }
+
+    @GetMapping("api/getPaperDetailById")
+    public String getPaperDetailById(@RequestParam String id) {
+        com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);
+        List<String> usernames;
+        if (paper.getCollaborators().equals("")) {
+            usernames = new ArrayList<>();
+        } else {
+            usernames = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+        }
+        usernames.add(paper.getUsername());
+        List<Author> authors = new ArrayList<>();
+        for (String username : usernames) {
+            User user = userMapper.selectUserByUsername(username);
+            Author author = new Author(user.getUsername(), user.getName(), user.getEmail(), user.getSchool(), user.getCountry());
+            authors.add(author);
+        }
+        Detail detail = new Detail(paper.getPaper(), paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCommitTime(), paper.getState(), authors);
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("detail", detail);
+        return Feedback.info(data);
     }
 }

@@ -18,7 +18,7 @@ instance.interceptors.request.use(config => {
 // 相应拦截器
 instance.interceptors.response.use(result => {
     const data = result.data;
-    if (data.errno !== 0) {
+    if (data.errno === 1) {
         message.error(data.errmsg || '网络请求错误');
     }
     return data;
