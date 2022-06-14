@@ -33,7 +33,7 @@ public class ReviewController {
     }
 
     @PostMapping("/api/submitReview")
-    public String submitPaper(@RequestBody Review review){
+    public String submitReview(@RequestBody Review review){
         try {
             String username = TokenUtils.getUserByToken(review.getToken());
             com.ccjiahao.entity.Review review1 = new com.ccjiahao.entity.Review(0, review.getPaperId(),username,review.getIsAssociated(),review.getLogic(),review.getSci(),review.getInnovation(),review.getPassOrReject(),review.getSuggestion(),new Date(System.currentTimeMillis()));
@@ -56,6 +56,27 @@ public class ReviewController {
                 emails.add(user.getEmail());
             }
             emailUtils.sendRebuttalRemain(emails.toArray(String[]::new), names.toArray(String[]::new), paper.getTitle());
+        } catch (Exception e) {
+            return Feedback.error("Token失效！");
+        }
+        return Feedback.info(null);
+    }
+
+    @PostMapping("/api/updateReview")
+    public String updateReview(@RequestBody Review review){
+        try{
+            String paperid = String.valueOf(review.getPaperId());
+            com.ccjiahao.entity.Review review1 = reviewMapper.selectReviewByPaperId(paperid);
+            review1.setLogic(review.getLogic());
+            review1.setInnovation(review.getInnovation());
+            review1.setSci(review.getSci());
+            review1.setPassOrReject(review.getPassOrReject());
+            review1.setSuggestion(review.getSuggestion());
+            reviewMapper.updateById(review1);
+            Paper paper = paperMapper.selectPaperById(paperid);
+            paper.setState("已确认");
+            paperMapper.updateById(paper);
+            // 发送邮件逻辑
         } catch (Exception e) {
             return Feedback.error("Token失效！");
         }
