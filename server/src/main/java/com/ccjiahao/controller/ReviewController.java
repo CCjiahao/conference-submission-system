@@ -42,7 +42,13 @@ public class ReviewController {
             paper.setState("待辩论");
             paperMapper.updateById(paper);
             reviewMapper.insert(review1);
-            List<String> names = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+            List<String> names;
+            if(paper.getCollaborators().equals("")) {
+                names = new ArrayList<>();
+            }
+            else{
+                names = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+            }
             List<String> emails = new ArrayList<>();
             names.add(paper.getUsername());
             for (String name: names) {
