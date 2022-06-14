@@ -103,25 +103,18 @@ const columns = [
 const dataSource: Ref<PaperItem[]> = ref([]);
 const paper = ref({
     uuid: '',
-    title: '1',
-    abstracts: '1',
-    expertise: '1',
-    commitTime: '1',
-    state: '1',
+    title: '',
+    abstracts: '',
+    expertise: '',
+    commitTime: '',
+    state: '',
     authors: [
         {
-            username: '1',
-            name: '1',
-            email: '2',
-            school: '3',
-            country: '4',
-        },
-        {
-            username: '11',
-            name: '11',
-            email: '22',
-            school: '33',
-            country: '44',
+            username: '',
+            name: '',
+            email: '',
+            school: '',
+            country: '',
         }
     ]
 })
