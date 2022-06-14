@@ -11,7 +11,7 @@
                         target="_blank">下载论文</a>
                     <a-divider type="vertical" />
                     <template v-if="record.state !== '待审核'">
-                        <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看审阅</router-link>
+                        <router-link :to="{ path: '/chairman/review', query: { id: record.id } }">查看审阅</router-link>
                         <a-divider type="vertical" />
                     </template>
                     <a @click="showConfirm(record)">删除论文</a>

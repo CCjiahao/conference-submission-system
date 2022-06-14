@@ -47,4 +47,6 @@ export const GetPaperDetailByIdApi = (paperid: number) => instance.get('/api/get
 // 获得用户列表
 export const GetUsers = () => instance.get('/api/getUsers')
 // 更新评审意见
-export const UpdateReviewApi= (token: string, paperId: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/updateReview', { token: token, paperId: paperId, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })
+export const UpdateReviewApi = (token: string, paperId: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/updateReview', { token: token, paperId: paperId, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })
+// 确认论文审稿意见
+export const ConfirmReviewApi = (token: string, paperId: string) => instance.post("/api/confirmReview", {token: token, paperId: paperId})
