@@ -20,6 +20,8 @@ export const GetUserByEmailApi = (email: string) => instance.get('/api/getUserBy
 export const SubmitPaperApi = (token: string, title: string, abstracts: string, expertise: string, collaborators: string, paper: string) => instance.post('/api/submitPaper', { token: token, title: title, abstracts: abstracts, expertise: expertise, collaborators: collaborators, paper: paper })
 // 获取全部论文
 export const GetPapersApi = () => instance.get('/api/getPapers')
+// 获取全部论文及负责的审稿人信息
+export const GetPapersWithReviewerApi = () => instance.get('/api/getPapersWithReviewer')
 // 根据ID获取论文
 export const GetPapersByIdApi = (id: string) => instance.get('/api/getPaperById?id=' + id)
 // 根据作者来获取论文列表

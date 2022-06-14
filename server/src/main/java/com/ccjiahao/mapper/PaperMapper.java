@@ -1,8 +1,10 @@
 package com.ccjiahao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ccjiahao.dto.PaperReview;
 import com.ccjiahao.entity.Paper;
 import com.ccjiahao.entity.User;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -36,4 +38,8 @@ public interface PaperMapper extends BaseMapper<Paper> {
         }
         return data;
     }
+
+    @Select("SELECT paper.*,review.`reviewer` FROM paper,review WHERE paper.id=review.paper_id")
+    public List<PaperReview> getPapersWithReviewer();
+
 }

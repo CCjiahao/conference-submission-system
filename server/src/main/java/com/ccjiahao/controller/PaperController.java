@@ -56,6 +56,13 @@ public class PaperController {
         return Feedback.info(data);
     }
 
+    @GetMapping("/api/getPapersWithReviewer")
+    public String getPapersWithManInCharge() {
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("papers", paperMapper.getPapersWithReviewer());
+        return Feedback.info(data);
+    }
+
     @GetMapping("api/getPaperById")
     public String getPaperById(@RequestParam String id) {
         Dictionary<String, Object> data = new Hashtable<>();

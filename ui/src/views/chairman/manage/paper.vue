@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { GetPapersApi, GetPaperDetailByIdApi } from '@/request/api';
+import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi } from '@/request/api';
 
 const columns = [
     {
@@ -77,8 +77,8 @@ const columns = [
     },
     {
         title: '负责人',
-        dataIndex: 'manInCharge',
-        key: 'manInCharge',
+        dataIndex: 'reviewer',
+        key: 'reviewer',
     },
     {
         title: '状态',
@@ -92,7 +92,7 @@ const columns = [
 ];
 
 const papers = ref([])
-GetPapersApi().then((res: any) => {
+GetPapersWithReviewerApi().then((res: any) => {
     if (res.errno === 0) {
         papers.value = res.data['papers'];
     }
@@ -120,8 +120,10 @@ const paper = ref({
             school: '',
             country: '',
         }
-    ]
+    ],
+    reviewer: ''
 })
+
 const paperid = ref(0);
 const visible = ref<boolean>(false);
 const showDrawer = (id: number) => {
