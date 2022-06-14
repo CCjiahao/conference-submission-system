@@ -44,6 +44,12 @@ public class EmailUtils {
     }
 
     public void sendReReviewRemain(String toEmail, String username, String title) throws UnsupportedEncodingException, javax.mail.MessagingException {
-        sendEmail(toEmail, username + "已经就名为《" + title + "》的论文进行辩驳，请即使查阅，如有必要请尽快修改你的审阅意见。查看地址：http://localhost:8080/review/log。");
+        sendEmail(toEmail, username + "已经就名为《" + title + "》的论文进行辩驳，请及时查阅，如有必要请尽快修改你的审阅意见。查看地址：http://localhost:8080/review/log。");
+    }
+
+    public void sendReviewConfirm(String[] toEmails, String[] usernames, String title) throws UnsupportedEncodingException, javax.mail.MessagingException {
+        for(int i = 0; i < toEmails.length; i++) {
+            sendEmail(toEmails[i], usernames[i] + "您好，《" + title + "》论文，已经完成最终审核，请尽早登录系统查看论文投递进度。查看地址：http://localhost:8080/。");
+        }
     }
 }
