@@ -46,3 +46,5 @@ export const GetRebuttalByPaperIdApi = (paperid: string) => instance.get('/api/g
 export const GetPaperDetailByIdApi = (paperid: number) => instance.get('/api/getPaperDetailById?id=' + paperid)
 // 获得用户列表
 export const GetUsers = () => instance.get('/api/getUsers')
+// 更新评审意见
+export const UpdateReviewApi= (token: string, paperId: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/updateReview', { token: token, paperId: paperId, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })
