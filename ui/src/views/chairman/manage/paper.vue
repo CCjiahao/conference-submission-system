@@ -7,7 +7,8 @@
             </template>
             <template v-if="column.key === 'action'">
                 <span>
-                    <a>下载论文</a>
+                    <a type="primary" :href="'http://localhost:8081/api/download?uuid=' + record.paper"
+                        target="_blank">下载论文</a>
                     <a-divider type="vertical" />
                     <a>查看辩论</a>
                     <a-divider type="vertical" />
