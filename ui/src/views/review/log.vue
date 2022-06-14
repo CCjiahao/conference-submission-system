@@ -19,14 +19,12 @@
                     <!--下载请求-->
                     <a :href="'http://localhost:8081/api/download?uuid=' + record.paper" target="_blank">下载文章</a>
                     <a-divider type="vertical" />
-                    <template v-if="record.state === '待审核'">
-                        <router-link :to="{ path: '/review/edit', query: { id: record.id } }">编辑审阅</router-link>
+                    <template v-if="record.state === '已辩论'">
+                        <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看辩论</router-link>
                     </template>
                     <template v-else-if="record.state === '待辩论'">
                         <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看审阅</router-link>
                     </template>
-                    <a-divider type="vertical" />
-                    <a>查看辩论</a>
                 </span>
             </template>
         </template>
