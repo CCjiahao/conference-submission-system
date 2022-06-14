@@ -10,18 +10,17 @@
         <div style="margin: 5px 0px;">接收意见: {{ review.passOrReject }}</div>
         <div style="margin: 5px 0px;">评审意见: {{ review.suggestion }}</div>
         <a-form-item name="rebuttal" v-if="author">
-            <a-textarea v-model:value="paperState.rebuttal" placeholder="你的辩论内容" />
+            <a-textarea v-model:value="paperState.rebuttal" :disabled="disabled" placeholder="你的辩论内容" />
         </a-form-item>
-        <a-button type="primary" @click="onFinish" style="margin-top: 10px" v-if="author">提交辩论结果</a-button>
+        <a-button type="primary" @click="onFinish" style="margin-top: 10px" v-if="author && !disabled">提交辩论结果</a-button>
         <a-button @click="goBack" style="margin-top: 10px">返回</a-button>
     </a-form>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
-import { GetReviewByPaperIdApi } from '@/request/api'
+import { GetReviewByPaperIdApi, SubmitRebuttalApi, GetRebuttalByPaperIdApi } from '@/request/api'
 import { message } from 'ant-design-vue';
-import { SubmitRebuttalApi } from '@/request/api'
 
 interface PaperState {
     rebuttal: string;
@@ -31,7 +30,8 @@ export default defineComponent({
         return {
             review: [],
             paperState: { rebuttal: '' },
-            author: false
+            author: false,
+            disabled: false
         }
     },
     methods: {
@@ -39,6 +39,15 @@ export default defineComponent({
             GetReviewByPaperIdApi(id).then((res: any) => {
                 if (res.errno === 0) {
                     this.review = res.data['review'];
+                }
+            })
+        },
+        getRebuttalbyPaperId(id: any) {
+            GetRebuttalByPaperIdApi(id).then((res: any) => {
+                console.log(res)
+                this.disabled = (res.errno === 0);
+                if(res.errno === 0) {
+                    this.paperState.rebuttal = res.data.rebuttal.rebuttal;
                 }
             })
         },
@@ -65,6 +74,7 @@ export default defineComponent({
     mounted() {
         let id = this.$route.query.id;
         this.getReviewbyPaperId(id);
+        this.getRebuttalbyPaperId(id);
         this.paperState = reactive<PaperState>({
             rebuttal: '',
         });

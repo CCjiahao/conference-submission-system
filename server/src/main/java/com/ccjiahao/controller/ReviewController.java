@@ -58,8 +58,12 @@ public class ReviewController {
 
     @GetMapping("api/getReviewByPaperId")
     public String getReviewByPaperId(@RequestParam String paperid){
+        com.ccjiahao.entity.Review review = reviewMapper.selectReviewByPaperId(paperid);
+        if (review == null) {
+            return Feedback.error("该审核意见不存在");
+        }
         Dictionary<String, Object> data = new Hashtable<>();
-        data.put("review", reviewMapper.selectReviewByPaperId(paperid));
+        data.put("review", review);
         return Feedback.info(data);
     }
 

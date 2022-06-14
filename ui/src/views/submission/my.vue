@@ -11,8 +11,8 @@
                 </template>
                 <template v-else-if="column.dataIndex === 'operation'">
                     <a :href="'http://localhost:8081/api/download?uuid=' + record.paper" target="_blank">下载</a>
-                    <a-divider v-if="record.state == '待辩论'" type="vertical" />
-                    <router-link v-if="record.state == '待辩论'"
+                    <a-divider v-if="record.state != '待审核'" type="vertical" />
+                    <router-link v-if="record.state != '待审核'"
                         :to="{ path: '/submission/rebuttal', query: { id: record.id } }">查看审阅材料</router-link>
                     <a-divider v-if="record.state == '中选'" type="vertical" />
                     <router-link v-if="record.state == '中选'" :to="{ path: '/submission/rebuttal', query: { id: record.id } }">

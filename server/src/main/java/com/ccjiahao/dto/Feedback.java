@@ -26,4 +26,13 @@ public class Feedback {
         }
         return gson.toJson(ret);
     }
+
+    public static String debug(@Nullable String errmsg) {
+        Dictionary<String, Object> ret = new Hashtable<>();
+        ret.put("errno", 2);
+        if(errmsg != null) {
+            ret.put("errmsg", errmsg);
+        }
+        return gson.toJson(ret);
+    }
 }

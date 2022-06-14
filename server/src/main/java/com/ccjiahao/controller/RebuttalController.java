@@ -15,6 +15,9 @@ import com.ccjiahao.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 @CrossOrigin(origins = {"*", "null"})
 @RestController
 public class RebuttalController {
@@ -57,5 +60,16 @@ public class RebuttalController {
         } catch (Exception e) {
             return Feedback.error(e.toString());
         }
+    }
+
+    @GetMapping("/api/getRebuttalByPaperId")
+    public String getRebuttalByPaperId(@RequestParam String paperid){
+        Rebuttal rebuttal = rebuttalMapper.selectByPaperId(paperid);
+        if (rebuttal == null) {
+            return Feedback.debug("该辩驳不存在");
+        }
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("rebuttal", rebuttal);
+        return Feedback.info(data);
     }
 }
