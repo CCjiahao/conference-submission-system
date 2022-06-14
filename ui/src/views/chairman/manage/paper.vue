@@ -89,7 +89,7 @@ const columns = [
         key: 'state',
     },
     {
-        title: 'Action',
+        title: '操作',
         key: 'action',
     },
 ];
@@ -128,8 +128,8 @@ const getPapersWithoutReviewer = () => {
             for(var i=0; i<res.data['papers'].length;i++){
                 const paper1 = res.data['papers'][i];
                 if(paper1.state == "待审核"){
-                    paper1.reviewer = "暂无"
-                    papers.value.push(paper1)
+                    paper1.reviewer = "暂无";
+                    papers.value.push(paper1);
                 }
             }
         }
