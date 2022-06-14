@@ -15,26 +15,26 @@
             :validate-messages="validateMessages"
             @finish="onFinish"
         >
-            <a-form-item :name="['user', 'username']" label="用户名" :rules="[{ required: true }]">
+            <a-form-item :name="['user', 'username']" label="用户名">
                 <a-input disabled="true" v-model:value="formState.user.username" />                            
             </a-form-item>
             <a-form-item :name="['user', 'name']" label="姓名" :rules="[{ required: true }]">
             <a-input v-model:value="formState.user.name" />
             </a-form-item>
-            <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
+            <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email', required: true }]">
             <a-input v-model:value="formState.user.email" />
             </a-form-item>
             <a-form-item :name="['user', 'school']" label="组织" :rules="[{ required: true }]">
-            <a-input-number v-model:value="formState.user.school" />
+            <a-input v-model:value="formState.user.school" />
             </a-form-item>
-            <a-form-item :name="['user', 'country']" label="国家/地区">
+            <a-form-item :name="['user', 'country']" label="国家/地区" :rules="[{ required: true }]">
             <a-input v-model:value="formState.user.country" />
             </a-form-item>
-            <a-form-item :name="['user', 'role']" label="角色">
-            <a-textarea v-model:value="formState.user.role" />
+            <a-form-item :name="['user', 'role']" label="角色" :rules="[{ required: true }]">
+            <a-input v-model:value="formState.user.role" />
             </a-form-item>
-            <a-form-item :name="['user', 'expertise']" label="归属组别">
-            <a-textarea v-model:value="formState.user.expertise" />
+            <a-form-item :name="['user', 'expertise']" label="归属组别" :rules="[{ required: true }]">
+            <a-input v-model:value="formState.user.expertise" />
             </a-form-item>
             <!-- <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
             <a-button type="primary" html-type="submit">Submit</a-button>
@@ -47,6 +47,7 @@
 import { ref, reactive, computed } from 'vue'
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import { UpdateUserApi } from '@/request/api'
 
 const columns = [
     {
@@ -103,10 +104,22 @@ const formState = reactive({
     },
 });
 
+
+function getUsers(){
+    axios({
+        url:"http://localhost:8081/api/getUsers",
+        method:'GET',
+    }).then(res=>{
+        console.log(res.data);
+
+        // this.users= res.data;
+    })
+};
+
 export default defineComponent({
     data() {
         return {
-            users:[]
+            users: []
         }
     },
     methods: {
@@ -121,7 +134,13 @@ export default defineComponent({
         },
         see(value: any){
             console.log(value);
-            formState.user = value;
+            formState.user.username = value.username;
+            formState.user.name = value.name;
+            formState.user.email = value.email;
+            formState.user.school = value.school;
+            formState.user.country = value.country;
+            formState.user.role = value.role;
+            formState.user.expertise = value.expertise;
         }
     },
     mounted() {
@@ -137,6 +156,7 @@ export default defineComponent({
 
         const handleOk = (e: MouseEvent) => {
             console.log(e);
+            onFinish(formState);
             visible.value = false;
         };
 
@@ -158,6 +178,13 @@ export default defineComponent({
 
         const onFinish = (values: any) => {
             console.log('Success:', values);
+            UpdateUserApi(values.user.username, values.user.name, values.user.school, values.user.country, values.user.expertise, values.user.email).then((res: any) => {
+
+            }).catch((err: any) => {
+                console.log(err);
+            })
+
+            //在这里调用getUsers()刷新表格的数据源
         };
 
         return {

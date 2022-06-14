@@ -63,4 +63,10 @@ public class UserController {
             return Feedback.error("token失效！");
         }
     }
+
+    @PostMapping("/api/updateUser")
+    public String updateUser(@RequestBody User user){
+        userMapper.updateByUsername(user);
+        return Feedback.info(null);
+    }
 }
