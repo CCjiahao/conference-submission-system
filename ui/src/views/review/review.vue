@@ -9,9 +9,14 @@
         <div style="margin: 5px 0px;">创新性得分: {{ review.innovation }}</div>
         <div style="margin: 5px 0px;">接收意见: {{ review.passOrReject }}</div>
         <div style="margin: 5px 0px;">评审意见: {{ review.suggestion }}</div>
-        <a-form-item name="rebuttal" v-if="author">
-            <a-textarea v-model:value="paperState.rebuttal" :disabled="disabled" placeholder="你的辩论内容" />
-        </a-form-item>
+        <a-row style="width: 100%;" v-if="author || paperState.rebuttal !== ''">
+            <a-col>辩驳意见:</a-col>
+            <a-col :span="20" style="margin-left: 10px;">
+                <a-form-item name="rebuttal">
+                    <a-textarea v-model:value="paperState.rebuttal" :disabled="disabled" placeholder="你的辩论内容" />
+                </a-form-item>
+            </a-col>
+        </a-row>
         <a-button type="primary" @click="onFinish" style="margin-top: 10px" v-if="author && !disabled">提交辩论结果</a-button>
         <a-button @click="goBack" style="margin-top: 10px">返回</a-button>
     </a-form>
@@ -46,7 +51,7 @@ export default defineComponent({
             GetRebuttalByPaperIdApi(id).then((res: any) => {
                 console.log(res)
                 this.disabled = (res.errno === 0);
-                if(res.errno === 0) {
+                if (res.errno === 0) {
                     this.paperState.rebuttal = res.data.rebuttal.rebuttal;
                 }
             })

@@ -10,8 +10,10 @@
                     <a type="primary" :href="'http://localhost:8081/api/download?uuid=' + record.paper"
                         target="_blank">下载论文</a>
                     <a-divider type="vertical" />
-                    <a>查看辩论</a>
-                    <a-divider type="vertical" />
+                    <template v-if="record.state !== '待审核'">
+                        <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看审阅</router-link>
+                        <a-divider type="vertical" />
+                    </template>
                     <a>删除论文</a>
                 </span>
             </template>
