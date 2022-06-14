@@ -29,8 +29,9 @@ const collapsed = computed(() => {
 
 <style scoped lang="scss">
 .layout {
-  height: 100%;
   background-color: #001529;
+  min-height: 100vh;
+
   .asside {
     background-color: #001529;
     border-right: 1px solid #f0f0f0 !important;
