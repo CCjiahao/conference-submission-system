@@ -39,7 +39,7 @@ public interface PaperMapper extends BaseMapper<Paper> {
         return data;
     }
 
-    @Select("SELECT paper.*,review.`reviewer` FROM paper,review WHERE paper.id=review.paper_id")
+    @Select("SELECT paper.*,review.`reviewer` FROM paper,review WHERE paper.id=review.paper_id ORDER BY paper.id ASC;")
     public List<PaperReview> getPapersWithReviewer();
 
 }

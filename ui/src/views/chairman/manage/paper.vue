@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,Ref } from 'vue'
 import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi, DeletePaperByIdAdminApi } from '@/request/api';
 import { Modal, message } from 'ant-design-vue';
 import { createVNode, defineComponent } from 'vue';
@@ -94,11 +94,11 @@ const columns = [
     },
 ];
 
-const papers = ref([])
+var papers: Ref<any[]> = ref([]);
 
 const getpapers = () => {
     papers.value = []
-    GetPapersApi().then((res: any) => {
+    GetPapersWithReviewerApi().then((res: any) => {
         if (res.errno === 0) {
             papers.value = res.data['papers'];
         }
@@ -106,11 +106,35 @@ const getpapers = () => {
 }
 getpapers();
 
-// GetPapersWithReviewerApi().then((res: any) => {
-//     if (res.errno === 0) {
-//         papers.value = res.data['papers'];
-//     }
-// })
+// const updateReviewer = () => {
+//     GetPapersWithReviewerApi().then((res: any) => {
+//         if (res.errno === 0) {
+//             for(var i=0; i<res.data['papers'].length;i++){
+//                 const paper1 = res.data['papers'][i];
+//                 for(var j=0;j<papers.value.length;j++){
+//                     if(paper1.id == papers.value[j].id){
+//                         papers.value[j].reviewer = paper1.reviewer;
+//                     }
+//                 }
+//             }
+//         }
+//     })
+// }
+// updateReviewer();
+
+const getPapersWithoutReviewer = () => {
+    GetPapersApi().then((res: any) => {
+        if (res.errno === 0) {
+            for(var i=0; i<res.data['papers'].length;i++){
+                const paper1 = res.data['papers'][i];
+                if(paper1.state == "待审核"){
+                    papers.value.push(paper1)
+                }
+            }
+        }
+    })
+}
+getPapersWithoutReviewer();
 
 const paper = ref({
     uuid: '',
@@ -169,6 +193,7 @@ const showConfirm = (value: any) => {
                         message.info("论文删除成功！");
                         //刷新数据
                         getpapers();
+                        getPapersWithoutReviewer();
                     }
                 })
             }
