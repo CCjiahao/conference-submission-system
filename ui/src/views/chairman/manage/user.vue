@@ -23,21 +23,28 @@
                 <a-input v-model:value="formState.user.school" />
             </a-form-item>
             <a-form-item :name="['user', 'country']" label="国家/地区" :rules="[{ required: true }]">
-                <a-input v-model:value="formState.user.country" />
+                <a-input v-model:value="formState.user.country" v-show="false" placeholder="国家" />
+                <a-select placeholder="国家" label-in-value style="width: 100%" v-model:value="formState.user.country"
+                    :options="countrys" @change="countryChange" />
             </a-form-item>
             <a-form-item :name="['user', 'role']" label="角色" :rules="[{ required: true }]">
-                <a-input v-model:value="formState.user.role" />
+                <a-input v-model:value="formState.user.role" v-show="false" placeholder="角色" />
+                <a-select placeholder="角色" label-in-value style="width: 100%" v-model:value="formState.user.role"
+                    :options="[{ value: 'researcher' }, { value: 'reviewer' }]" @change="roleChange" />
             </a-form-item>
             <a-form-item :name="['user', 'expertise']" label="归属组别" :rules="[{ required: true }]">
-                <a-input v-model:value="formState.user.expertise" />
+                <a-input v-model:value="formState.user.expertise" v-show="false" placeholder="角色" />
+                <a-select mode="multiple" placeholder="所属领域" label-in-value style="width: 100%"
+                    :options="expertise_options" v-model:value="expertise_select" @change="expertiseChange" />
             </a-form-item>
         </a-form>
     </a-modal>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, Ref } from 'vue'
+import { ref, reactive, Ref } from 'vue'
 import { UpdateUserApi, GetUsers } from '@/request/api'
+import countrys from '@/variable/countrys'
 
 const columns = [
     {
@@ -95,6 +102,7 @@ const formState = reactive({
 });
 
 var users: Ref<any[]> = ref([]);
+const expertise_select: Ref<any[]> = ref([])
 const getUsers = () => {
     users.value = []
     GetUsers().then((res: any) => {
@@ -119,6 +127,11 @@ const see = (value: any) => {
     formState.user.country = value.country;
     formState.user.role = value.role;
     formState.user.expertise = value.expertise;
+    const expertises = value.expertise.split(',');
+    expertise_select.value = []
+    for (var i = 0; i < expertises.length; i++) {
+        expertise_select.value.push({value: expertises[i]})
+    }
 }
 
 const visible = ref<boolean>(false);
@@ -150,7 +163,7 @@ const layout = {
 
 const onFinish = (values: any) => {
     console.log('Success:', values);
-    UpdateUserApi(values.user.username, values.user.name, values.user.school, values.user.country, values.user.expertise, values.user.email).then((res: any) => {
+    UpdateUserApi(values.user.username, values.user.name, values.user.school, values.user.country, values.user.expertise, values.user.email, values.user.role).then((res: any) => {
         console.log(res)
         if (res.errno === 0) {
             getUsers()
@@ -160,6 +173,23 @@ const onFinish = (values: any) => {
     })
 };
 
+const countryChange = (value: any) => {
+    formState.user.country = value['value'];
+};
+const roleChange = (value: any) => {
+    formState.user.role = value['value'];
+};
+const expertise_options: { value: string }[] = [];
+expertise_options.push({ value: 'CV' })
+expertise_options.push({ value: 'NLP' })
+expertise_options.push({ value: 'ML' })
+const expertiseChange = (values: any) => {
+    var expertises = [];
+    for (var i = 0; i < values.length; i++) {
+        expertises.push(values[i]['value']);
+    }
+    formState.user.expertise = expertises.toString()
+};
 </script>
 
 <style scoped lang="scss">

@@ -11,7 +11,7 @@ export const GetVerificationCodeByUsernameAndEmailApi = (username: string, email
 // 注册用户
 export const RegisterApi = (username: string, name: string, school: string, country: string, expertise: string, password: string, email: string, code: string) => instance.post('/api/register', { username: username, name: name, school: school, country: country, expertise: expertise, password: password, email: email, code: code })
 // 修改用户接口
-export const UpdateUserApi = (username: string, name: string, school: string, country: string, expertise: string, email: string) => instance.post('/api/updateUser', { username: username, name: name, school: school, country: country, expertise: expertise, email: email})
+export const UpdateUserApi = (username: string, name: string, school: string, country: string, expertise: string, email: string, role: string) => instance.post('/api/updateUser', { username: username, name: name, school: school, country: country, expertise: expertise, email: email, role: role})
 // 忘记密码接口
 export const ForgetApi = (username: string, password: string, email: string, code: string) => instance.post('/api/forget', { username: username, password: password, email: email, code: code })
 // 根据邮箱获取用户信息
