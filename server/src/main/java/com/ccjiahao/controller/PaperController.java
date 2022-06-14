@@ -138,6 +138,24 @@ public class PaperController {
         }
     }
 
+    @GetMapping("api/deletePaperByIdAdmin")
+    public String deletePaperByIdAdmin(@RequestParam String token, @RequestParam String id) {
+        try {
+            String username = TokenUtils.getUserByToken(token);
+            com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);
+            if (paper == null) {
+                return Feedback.error("没有找到该论文");
+            }
+            if (!username.equals("chairman")) {
+                return Feedback.error(username + ":你没有该权限");
+            }
+            paperMapper.deleteById(id);
+            return Feedback.info(null);
+        } catch (Exception e) {
+            return Feedback.error("token失效！");
+        }
+    }
+
     @GetMapping("api/getPaperDetailById")
     public String getPaperDetailById(@RequestParam String id) {
         com.ccjiahao.entity.Paper paper = paperMapper.selectPaperById(id);

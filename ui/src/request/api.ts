@@ -32,6 +32,8 @@ export const GetPapersByReviewerApi = (token: string) => instance.get('/api/getP
 export const GetReviewedPapersByReviewerApi = (token: string) => instance.get('/api/getReviewedPapersByReviewer?token=' + token)
 // 根据token和id来删除论文（只能删除待审核和未选中论文）
 export const DeletePaperByIdApi = (token: string, id: number) => instance.get('/api/deletePaperById?token=' + token + '&id=' + id)
+// 根据id来删除论文，不限制论文状态，管理员用的高权限版本
+export const DeletePaperByIdAdminApi = (token: string, id: number) => instance.get('/api/deletePaperByIdAdmin?token=' + token + '&id=' + id)
 //  提交评审意见
 export const SubmitReviewApi = (token: string, paperId: string, isAssociated: string, logic: number, sci: number, innovation: number, passOrReject: string, suggestion: string) => instance.post('/api/submitReview', { token: token, paperId: paperId, isAssociated: isAssociated, logic: logic, sci: sci, innovation: innovation, passOrReject: passOrReject, suggestion: suggestion })
 // 根据paperid获取review

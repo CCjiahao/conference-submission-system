@@ -1,5 +1,5 @@
 <template>
-    <div>论文管理界面</div>
+    <h2>论文管理界面</h2>
     <a-table :dataSource="papers" :columns="columns">
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'title'">
@@ -14,7 +14,7 @@
                         <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看审阅</router-link>
                         <a-divider type="vertical" />
                     </template>
-                    <a>删除论文</a>
+                    <a @click="showConfirm(record)">删除论文</a>
                 </span>
             </template>
         </template>
@@ -52,7 +52,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi } from '@/request/api';
+import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi, DeletePaperByIdAdminApi } from '@/request/api';
+import { Modal, message } from 'ant-design-vue';
+import { createVNode, defineComponent } from 'vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
 const columns = [
     {
@@ -92,11 +95,22 @@ const columns = [
 ];
 
 const papers = ref([])
-GetPapersWithReviewerApi().then((res: any) => {
-    if (res.errno === 0) {
-        papers.value = res.data['papers'];
-    }
-})
+
+const getpapers = () => {
+    papers.value = []
+    GetPapersApi().then((res: any) => {
+        if (res.errno === 0) {
+            papers.value = res.data['papers'];
+        }
+    })
+}
+getpapers();
+
+// GetPapersWithReviewerApi().then((res: any) => {
+//     if (res.errno === 0) {
+//         papers.value = res.data['papers'];
+//     }
+// })
 
 const paper = ref({
     uuid: '',
@@ -140,6 +154,29 @@ const showDrawer = (id: number) => {
 const onClose = () => {
     visible.value = false;
 };
+
+const showConfirm = (value: any) => {
+    const token = localStorage.getItem('token');
+    Modal.confirm({
+        title: '确认删除这篇论文吗?',
+        icon: createVNode(ExclamationCircleOutlined),
+        // content: 'When clicked the OK button, this dialog will be closed after 1 second',
+        content: '论文名称:' + value.title,
+        onOk() {
+            if (token != null) {
+                DeletePaperByIdAdminApi(token, value.id).then((res: any) => {
+                    if (res.errno === 0) {
+                        message.info("论文删除成功！");
+                        //刷新数据
+                        getpapers();
+                    }
+                })
+            }
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onCancel() {},
+      });
+    };
 
 </script>
 
