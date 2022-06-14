@@ -3,13 +3,12 @@
     <a-table :dataSource="users" :columns="columns">
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
-                <a @click="showModal(); see(record)">编辑</a>
+                <a @click="showModal(record)">编辑</a>
             </template>
         </template>
     </a-table>
     <a-modal centered v-model:visible="visible" title="编辑用户信息" @ok="handleOk">
-        <a-form :model="formState" v-bind="layout" name="nest-messages" :validate-messages="validateMessages"
-            @finish="onFinish">
+        <a-form :model="formState" v-bind="layout" name="nest-messages" :validate-messages="validateMessages">
             <a-form-item :name="['user', 'username']" label="用户名">
                 <a-input disabled="true" v-model:value="formState.user.username" />
             </a-form-item>
@@ -45,6 +44,8 @@
 import { ref, reactive, Ref } from 'vue'
 import { UpdateUserApi, GetUsers } from '@/request/api'
 import countrys from '@/variable/countrys'
+import { message } from 'ant-design-vue';
+import { checkEmail } from '@/utils/index'
 
 const columns = [
     {
@@ -118,8 +119,8 @@ const getUsers = () => {
 }
 getUsers();
 
-const see = (value: any) => {
-    console.log(value);
+const visible = ref<boolean>(false);
+const showModal = (value: any) => {
     formState.user.username = value.username;
     formState.user.name = value.name;
     formState.user.email = value.email;
@@ -130,18 +131,25 @@ const see = (value: any) => {
     const expertises = value.expertise.split(',');
     expertise_select.value = []
     for (var i = 0; i < expertises.length; i++) {
-        expertise_select.value.push({value: expertises[i]})
+        expertise_select.value.push({ value: expertises[i] })
     }
-}
-
-const visible = ref<boolean>(false);
-const showModal = () => {
     visible.value = true;
-};
-
+}
 const handleOk = (e: MouseEvent) => {
-    console.log(e);
-    onFinish(formState);
+    if (formState.user.name === '') { message.error('姓名不能为空'); return; }
+    if (formState.user.school === '') { message.error('学校不能为空'); return; }
+    if (formState.user.country === '') { message.error('国家不能为空'); return; }
+    if (formState.user.expertise === '') { message.error('至少有一个擅长领域'); return; }
+    if (formState.user.email === '') { message.error('邮件不能为空'); return; }
+    if (!checkEmail(formState.user.email)) { message.error('邮件不合法'); return; }
+    UpdateUserApi(formState.user.username, formState.user.name, formState.user.school, formState.user.country, formState.user.expertise, formState.user.email, formState.user.role).then((res: any) => {
+        console.log(res)
+        if (res.errno === 0) {
+            getUsers();
+        }
+    }).catch((err: any) => {
+        console.log(err);
+    })
     visible.value = false;
 };
 
@@ -159,18 +167,6 @@ const validateMessages = {
 const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 16 },
-};
-
-const onFinish = (values: any) => {
-    console.log('Success:', values);
-    UpdateUserApi(values.user.username, values.user.name, values.user.school, values.user.country, values.user.expertise, values.user.email, values.user.role).then((res: any) => {
-        console.log(res)
-        if (res.errno === 0) {
-            getUsers()
-        }
-    }).catch((err: any) => {
-        console.log(err);
-    })
 };
 
 const countryChange = (value: any) => {
