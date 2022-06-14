@@ -71,7 +71,6 @@ var routeMap: { [key: string]: [string, string]; } = {
     "/review/hall" : ["review", "review_hall"],
     "/review/log" : ["review", "review_log"],
     "/review/review" : ["review", "review_log"],
-    "/review/detail":["review","review_log"],
     "/review/edit":["review","review_log"],
     "/chairman/index" : ["chairman", "chairman_index"],
     "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
