@@ -40,3 +40,5 @@ export const SubmitRebuttalApi = (token: string, reviewer: string, paperId: stri
 export const GetRebuttalByPaperIdApi = (paperid: string) => instance.get('/api/getRebuttalByPaperId?paperid=' + paperid)
 // 根绝paperid获取文章详情
 export const GetPaperDetailByIdApi = (paperid: number) => instance.get('/api/getPaperDetailById?id=' + paperid)
+// 获得用户列表
+export const GetUsers = () => instance.get('/api/getUsers')

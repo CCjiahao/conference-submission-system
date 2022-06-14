@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserMapper userMapper;
-    private Gson gson=new Gson();
 
     @Autowired
     public UserController(UserMapper userMapper) {
@@ -43,7 +42,9 @@ public class UserController {
     @GetMapping("/api/getUsers")
     public String getUsers(){
         List<User> users = userMapper.selectList(null);
-        return gson.toJson(users);
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("users", users);
+        return Feedback.info(data);
     }
 
     @PostMapping("/api/getUserByToken")
