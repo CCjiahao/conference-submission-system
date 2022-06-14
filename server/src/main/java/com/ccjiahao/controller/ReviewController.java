@@ -77,6 +77,22 @@ public class ReviewController {
             paper.setState("已确认");
             paperMapper.updateById(paper);
             // 发送邮件逻辑
+            List<String> names;
+            if(paper.getCollaborators().equals("")) {
+                names = new ArrayList<>();
+            }
+            else{
+                names = new ArrayList<>(List.of(paper.getCollaborators().split(",")));
+            }
+            List<String> emails = new ArrayList<>();
+            names.add(paper.getUsername());
+            for (String name: names) {
+                User user = userMapper.selectUserByUsername(name);
+                emails.add(user.getEmail());
+            }
+            User chairman = userMapper.selectUserByUsername("chairman");
+            emails.add(chairman.getEmail());
+            emailUtils.sendReviewConfirm(emails.toArray(String[]::new), names.toArray(String[]::new), paper.getTitle());
         } catch (Exception e) {
             return Feedback.error("Token失效！");
         }
