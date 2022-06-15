@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @CrossOrigin(origins = {"*", "null"})
@@ -74,8 +76,6 @@ public class ReviewController {
             review1.setSuggestion(review.getSuggestion());
             reviewMapper.updateById(review1);
             Paper paper = paperMapper.selectPaperById(paperid);
-            paper.setState("已确认");
-            paperMapper.updateById(paper);
             // 发送邮件逻辑
             List<String> names;
             if(paper.getCollaborators().equals("")) {
@@ -90,12 +90,23 @@ public class ReviewController {
                 User user = userMapper.selectUserByUsername(name);
                 emails.add(user.getEmail());
             }
-            User chairman = userMapper.selectUserByUsername("chairman");
-            emails.add(chairman.getEmail());
-            emailUtils.sendReviewConfirm(emails.toArray(String[]::new), names.toArray(String[]::new), paper.getTitle());
+            emailUtils.sendReviewUpdate(emails.toArray(String[]::new), names.toArray(String[]::new), paper.getTitle());
         } catch (Exception e) {
             return Feedback.error("Token失效！");
         }
+        return Feedback.info(null);
+    }
+
+    @PostMapping("/api/confirmReview")
+    public String confirmReview(@RequestBody Review review) throws MessagingException, UnsupportedEncodingException {
+        if (!TokenUtils.verifyToken(review.getToken())) {
+            return Feedback.error("Token失效！");
+        }
+        Paper paper = paperMapper.selectPaperById(String.valueOf(review.getPaperId()));
+        paper.setState("已确认");
+        paperMapper.updateById(paper);
+        // 发送邮件逻辑
+        emailUtils.sendReviewConfirm(userMapper.selectUserByUsername("chairman").getEmail(), paper.getTitle());
         return Feedback.info(null);
     }
 
