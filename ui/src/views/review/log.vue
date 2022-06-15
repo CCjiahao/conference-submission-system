@@ -67,6 +67,20 @@
                 <a-timeline-item color="green">再审阅</a-timeline-item>
                 <a-timeline-item color="blue">最终结果</a-timeline-item>
                 </template>
+                <template v-else-if="paper.state==='已接收'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="green">再审阅</a-timeline-item>
+                <a-timeline-item color="green">最终结果:已接收</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='已拒绝'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="green">再审阅</a-timeline-item>
+                <a-timeline-item color="red">最终结果:已拒绝</a-timeline-item>
+                </template>
                 </a-timeline>
             </a-descriptions-item>
         </a-descriptions>
