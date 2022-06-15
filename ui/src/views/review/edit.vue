@@ -77,6 +77,7 @@
 import { defineComponent, reactive, toRaw, ref } from 'vue';
 import type { UnwrapRef } from 'vue';
 import { GetPapersByIdApi,SubmitReviewApi } from '@/request/api';
+import { message } from 'ant-design-vue';
 
 interface ReviewState {
   paperId:string,
@@ -119,11 +120,24 @@ export default defineComponent({
       })
     },
     goBack() {
-      this.$router.go(-1);
+      this.$router.replace({path:'/review/hall'});
     },
     submitAndJump(){
-      this.onSubmit();
-      this.goBack();
+      if (token == null) {
+        console.log("登录已过期");
+        return;
+      };
+      if (ReviewState.suggestion === '') {
+        message.error("评审意见内容不能为空");
+        return;
+      }
+      SubmitReviewApi(token,ReviewState.paperId,ReviewState.isAssociated,ReviewState.logic,ReviewState.sci,ReviewState.innovation,ReviewState.passOrReject,ReviewState.suggestion).then((res:any)=>{
+        message.info("评审意见提交成功")
+        console.log(res);
+        this.$router.replace({path:'/review/log'});
+      }).catch((err:any)=>{
+          console.log(err);
+      });
     }
   },
   mounted() {
@@ -132,31 +146,18 @@ export default defineComponent({
     this.getPaperbyId(id);
   },
   setup() {
+
     const marks = ref<Record<number, any>>({
       0: '很差',
       33: '一般',
       66: '良好',
       100: '优秀',
     });
-
-    const onSubmit = () => {
-      console.log('submit!', toRaw(ReviewState));
-      if (token == null) {
-        console.log("登录已过期");
-        return;
-      };
-      SubmitReviewApi(token,ReviewState.paperId,ReviewState.isAssociated,ReviewState.logic,ReviewState.sci,ReviewState.innovation,ReviewState.passOrReject,ReviewState.suggestion).then((res:any)=>{
-        console.log(res);
-      }).catch((err:any)=>{
-          console.log(err);
-      });
-    };
     return {
       marks,
       labelCol: { style: { width: '400px' } },
       wrapperCol: { span: 14 },
       ReviewState,
-      onSubmit,
     };
   },
 })
