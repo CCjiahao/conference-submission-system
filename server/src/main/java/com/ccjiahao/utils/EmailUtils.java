@@ -62,4 +62,16 @@ public class EmailUtils {
     public void sendReviewConfirm(String toEmail, String title) {
         sendEmail(toEmail, "主席您好，《" + title + "》论文已经完成审核，请及时确认是否录取该论文。");
     }
+
+    public void sendAcceptRemain(String[] toEmails, String[] usernames, String title) {
+        for(int i = 0; i < toEmails.length; i++) {
+            sendEmail(toEmails[i], usernames[i] + "你好，恭喜你作为作者/协作者投递的一篇名为《" + title + "》论文，已经被接收！");
+        }
+    }
+
+    public void sendRejectRemain(String[] toEmails, String[] usernames, String title) {
+        for(int i = 0; i < toEmails.length; i++) {
+            sendEmail(toEmails[i], usernames[i] + "你好，你作为作者/协作者投递的一篇名为《" + title + "》论文，已经被拒绝，欢迎再次投稿。");
+        }
+    }
 }

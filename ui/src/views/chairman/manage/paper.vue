@@ -9,11 +9,16 @@
                 <span>
                     <a type="primary" :href="'http://localhost:8081/api/download?uuid=' + record.paper"
                         target="_blank">下载论文</a>
-                    <a-divider type="vertical" />
                     <template v-if="record.state !== '待审核'">
-                        <router-link :to="{ path: '/chairman/review', query: { id: record.id } }">查看审阅</router-link>
                         <a-divider type="vertical" />
+                        <router-link :to="{ path: '/chairman/review', query: { id: record.id } }">查看审阅</router-link>
                     </template>
+                    <a-popconfirm title="是否接收该论文？" ok-text="接收" cancel-text="拒绝" v-if="record.state === '已确认'"
+                        @confirm="acceptPaper(record.id)" @cancel="rejectPaper(record.id)">
+                        <a-divider type="vertical" />
+                        <a href="#">是否接收</a>
+                    </a-popconfirm>
+                    <a-divider type="vertical" />
                     <a @click="showConfirm(record)">删除论文</a>
                 </span>
             </template>
@@ -51,8 +56,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref,Ref } from 'vue'
-import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi, DeletePaperByIdAdminApi } from '@/request/api';
+import { ref, Ref } from 'vue'
+import { GetPapersWithReviewerApi, GetPapersApi, GetPaperDetailByIdApi, DeletePaperByIdAdminApi, AcceptPaperApi, RejectPaperApi } from '@/request/api';
 import { Modal, message } from 'ant-design-vue';
 import { createVNode, defineComponent } from 'vue';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
@@ -106,28 +111,12 @@ const getpapers = () => {
 }
 getpapers();
 
-// const updateReviewer = () => {
-//     GetPapersWithReviewerApi().then((res: any) => {
-//         if (res.errno === 0) {
-//             for(var i=0; i<res.data['papers'].length;i++){
-//                 const paper1 = res.data['papers'][i];
-//                 for(var j=0;j<papers.value.length;j++){
-//                     if(paper1.id == papers.value[j].id){
-//                         papers.value[j].reviewer = paper1.reviewer;
-//                     }
-//                 }
-//             }
-//         }
-//     })
-// }
-// updateReviewer();
-
 const getPapersWithoutReviewer = () => {
     GetPapersApi().then((res: any) => {
         if (res.errno === 0) {
-            for(var i=0; i<res.data['papers'].length;i++){
+            for (var i = 0; i < res.data['papers'].length; i++) {
                 const paper1 = res.data['papers'][i];
-                if(paper1.state == "待审核"){
+                if (paper1.state == "待审核") {
                     paper1.reviewer = "暂无";
                     papers.value.push(paper1);
                 }
@@ -200,9 +189,39 @@ const showConfirm = (value: any) => {
             }
         },
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onCancel() {},
-      });
-    };
+        onCancel() { },
+    });
+};
+
+const acceptPaper = (id: any) => {
+    console.log(id)
+    const token = localStorage.getItem('token');
+    if (token) {
+        AcceptPaperApi(token, id).then((res: any) => {
+            if (res.errno === 0) {
+                message.info("成功接收该论文");
+                //刷新数据
+                getpapers();
+                getPapersWithoutReviewer();
+            }
+        })
+    }
+}
+
+const rejectPaper = (id: any) => {
+    console.log(id)
+    const token = localStorage.getItem('token');
+    if (token) {
+        RejectPaperApi(token, id).then((res: any) => {
+            if (res.errno === 0) {
+                message.info("成功拒绝该论文");
+                //刷新数据
+                getpapers();
+                getPapersWithoutReviewer();
+            }
+        })
+    }
+}
 
 </script>
 
