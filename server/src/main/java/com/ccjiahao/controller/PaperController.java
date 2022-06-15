@@ -49,6 +49,15 @@ public class PaperController {
         return Feedback.info(null);
     }
 
+    @GetMapping("/api/getPaperNumber")
+    public String getPaperNumber(){
+        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
+        int paperNumber = papers.size();
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("paperNumber", paperNumber);
+        return Feedback.info(data);
+    }
+
     @GetMapping("/api/getPapers")
     public String getPapers() {
         Dictionary<String, Object> data = new Hashtable<>();
