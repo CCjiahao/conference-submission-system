@@ -14,12 +14,8 @@
                     <a-divider v-if="record.state != '待审核'" type="vertical" />
                     <router-link v-if="record.state != '待审核'"
                         :to="{ path: '/submission/rebuttal', query: { id: record.id } }">查看审阅材料</router-link>
-                    <a-divider v-if="record.state == '中选'" type="vertical" />
-                    <router-link v-if="record.state == '中选'"
-                        :to="{ path: '/submission/rebuttal', query: { id: record.id } }">
-                        提交最终版论文</router-link>
-                    <a-divider v-if="record.state == '待审核' || record.state == '未中选'" type="vertical" />
-                    <a-popconfirm v-if="record.state == '待审核' || record.state == '未中选'" title="确认删除?"
+                    <a-divider v-if="record.state == '待审核' || record.state == '已拒绝'" type="vertical" />
+                    <a-popconfirm v-if="record.state == '待审核' || record.state == '已拒绝'" title="确认删除?"
                         @confirm="onDelete(record.id)">
                         <a>删除</a>
                     </a-popconfirm>
