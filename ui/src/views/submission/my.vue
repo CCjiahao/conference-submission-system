@@ -31,6 +31,52 @@
             <a-descriptions-item label="论文状态">{{ paper.state }}</a-descriptions-item>
             <a-descriptions-item label="论文摘要" :span="3">{{ paper.abstracts }}</a-descriptions-item>
             <a-descriptions-item label="提交时间">{{ paper.commitTime }}</a-descriptions-item>
+            <a-descriptions-item label="投递流程" > 
+                <a-timeline mode="left">
+                <template v-if="paper.state==='待审阅'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="blue">审阅</a-timeline-item>
+                <a-timeline-item color="grey">辩驳</a-timeline-item>
+                <a-timeline-item color="grey">再审阅</a-timeline-item>
+                <a-timeline-item color="grey">最终结果</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='待辩论'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="blue">辩驳</a-timeline-item>
+                <a-timeline-item color="grey">再审阅</a-timeline-item>
+                <a-timeline-item color="grey">最终结果</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='已辩论'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="blue">再审阅</a-timeline-item>
+                <a-timeline-item color="grey">最终结果</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='已确认'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="green">再审阅</a-timeline-item>
+                <a-timeline-item color="blue">最终结果</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='已接收'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="green">再审阅</a-timeline-item>
+                <a-timeline-item color="green">最终结果:已接收</a-timeline-item>
+                </template>
+                <template v-else-if="paper.state==='已拒绝'">
+                <a-timeline-item color="green">提交</a-timeline-item>
+                <a-timeline-item color="green">审阅</a-timeline-item>
+                <a-timeline-item color="green">辩驳</a-timeline-item>
+                <a-timeline-item color="green">再审阅</a-timeline-item>
+                <a-timeline-item color="red">最终结果:已拒绝</a-timeline-item>
+                </template>
+                </a-timeline>
+            </a-descriptions-item>
         </a-descriptions>
         <a-divider />
         <b>作者详情</b>
