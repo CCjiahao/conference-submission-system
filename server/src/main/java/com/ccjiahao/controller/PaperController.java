@@ -177,4 +177,69 @@ public class PaperController {
         data.put("detail", detail);
         return Feedback.info(data);
     }
+
+
+    @PostMapping("/api/acceptPaper")
+    public String acceptPaper(@RequestBody Paper paper) {
+        if (!TokenUtils.verifyToken(paper.getToken())) {
+            return Feedback.error("Token失效！");
+        }
+        com.ccjiahao.entity.Paper paper1 = paperMapper.selectPaperById(String.valueOf(paper.getId()));
+        if (paper1 == null) {
+            return Feedback.error("该论文不存在");
+        }
+        if(!paper1.getState().equals("已确认")){
+            return Feedback.error("该阶段不能接受论文");
+        }
+        paper1.setState("已接收");
+        paperMapper.updateById(paper1);
+
+        List<String> names;
+        if(paper1.getCollaborators().equals("")) {
+            names = new ArrayList<>();
+        }
+        else{
+            names = new ArrayList<>(List.of(paper1.getCollaborators().split(",")));
+        }
+        names.add(paper1.getUsername());
+        List<String> emails = new ArrayList<>();
+        for (String name: names) {
+            User user = userMapper.selectUserByUsername(name);
+            emails.add(user.getEmail());
+        }
+        emailUtils.sendAcceptRemain(emails.toArray(String[]::new), names.toArray(String[]::new), paper1.getTitle());
+        return Feedback.info(null);
+    }
+
+    @PostMapping("/api/rejectPaper")
+    public String rejectPaper(@RequestBody Paper paper) {
+        if (!TokenUtils.verifyToken(paper.getToken())) {
+            return Feedback.error("Token失效！");
+        }
+        com.ccjiahao.entity.Paper paper1 = paperMapper.selectPaperById(String.valueOf(paper.getId()));
+        if (paper1 == null) {
+            return Feedback.error("该论文不存在");
+        }
+        if(!paper1.getState().equals("已确认")){
+            return Feedback.error("该阶段不能拒绝论文");
+        }
+        paper1.setState("已拒绝");
+        paperMapper.updateById(paper1);
+
+        List<String> names;
+        if(paper1.getCollaborators().equals("")) {
+            names = new ArrayList<>();
+        }
+        else{
+            names = new ArrayList<>(List.of(paper1.getCollaborators().split(",")));
+        }
+        names.add(paper1.getUsername());
+        List<String> emails = new ArrayList<>();
+        for (String name: names) {
+            User user = userMapper.selectUserByUsername(name);
+            emails.add(user.getEmail());
+        }
+        emailUtils.sendRejectRemain(emails.toArray(String[]::new), names.toArray(String[]::new), paper1.getTitle());
+        return Feedback.info(null);
+    }
 }
