@@ -47,6 +47,15 @@ public class UserController {
         return Feedback.info(data);
     }
 
+    @GetMapping("/api/getUserNumber")
+    public String getUserNumber(){
+        List<User> users = userMapper.selectList(null);
+        int userNumber = users.size();
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("userNumber", userNumber);
+        return Feedback.info(data);
+    }
+
     @PostMapping("/api/getUserByToken")
     public String getUserByToken(@RequestBody Token token) {
         try {

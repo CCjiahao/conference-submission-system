@@ -54,3 +54,18 @@ export const ConfirmReviewApi = (token: string, paperId: string) => instance.pos
 export const AcceptPaperApi = (token: string, id: string) => instance.post("/api/acceptPaper", {token: token, id: id})
 // 拒绝论文
 export const RejectPaperApi = (token: string, id: string) => instance.post("/api/rejectPaper", {token: token, id: id})
+
+// 获取注册用户人数
+export const GetUserNumberApi = () => instance.get('/api/getUserNumber')
+// 获取投稿论文总数
+export const GetPaperNumberApi = () => instance.get('/api/getPaperNumber')
+// 获取昨日新增投稿数
+export const GetYesterdayPaperNumberApi = () => instance.get('/api/getYesterdayPaperNumber')
+// 获取论文投稿进度分布
+export const GetPaperProcessDistributionApi = () => instance.get('/api/getPaperProcessDistribution')
+// 获取论文投稿领域分布
+export const GetPaperExpertiseDistributionApi = () => instance.get('/api/getPaperExpertiseDistribution')
+// 获取论文投稿时间分布
+export const GetPaperBySubmitTimeApi = () => instance.get('/api/getPaperBySubmitTime')
+// 获取论文审稿时间分布
+export const GetPaperByReviewTimeApi = () => instance.get('/api/getPaperByReviewTime')
