@@ -54,8 +54,8 @@ public class RebuttalController {
             rebuttalMapper.insert(rebuttal_);
             paper.setState("已辩论");
             paperMapper.updateById(paper);
-            User user = userMapper.selectUserByUsername(username);
-            emailUtils.sendReReviewRemain(user.getEmail(), paper.getUsername(), paper.getTitle());
+            User reviewer = userMapper.selectUserByUsername(review.getReviewer());
+            emailUtils.sendReReviewRemain(reviewer.getEmail(), paper.getUsername(), paper.getTitle());
             return Feedback.info(null);
         } catch (Exception e) {
             return Feedback.error(e.toString());
