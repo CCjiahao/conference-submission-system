@@ -4,12 +4,12 @@
     <a-row :gutter="24">
       <a-col :span="6">
         <a-card>
-          <a-statistic title="注册用户人数" :value="userNumber" style="margin-right: 50px" />
+          <a-statistic title="注册用户人数" :value="userNumber"/>
         </a-card>
       </a-col>
       <a-col :span="6">
         <a-card>
-          <a-statistic title="已投稿论文总数" :value="958" />
+          <a-statistic title="已投稿论文总数" :value="paperNumber" />
         </a-card>
       </a-col>
       <a-col :span="6">
@@ -74,6 +74,18 @@ const getUserNumber = () => {
     })
 }
 getUserNumber();
+
+var paperNumber: Ref<any[]> = ref([]);
+
+const getPaperNumber = () => {
+    paperNumber.value = []
+    GetPaperNumberApi().then((res: any) => {
+        if (res.errno === 0) {
+            paperNumber.value = res.data['paperNumber'];
+        }
+    })
+}
+getPaperNumber();
 
 onMounted(() => {//需要获取到element,所以是onMounted的Hook
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
