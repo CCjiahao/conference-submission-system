@@ -75,6 +75,7 @@ var routeMap: { [key: string]: [string, string]; } = {
     "/chairman/index" : ["chairman", "chairman_index"],
     "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
     "/chairman/manage/paper" : ["chairman", "chairman_manage_paper"],
+    "/chairman/review" : ["chairman", "chairman_manage_paper"],
 };
 
 // 定义menu的状态

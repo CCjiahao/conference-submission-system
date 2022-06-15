@@ -162,6 +162,12 @@ router.beforeEach((to, from, next) => {
                                     name: 'chairman_manage_paper',
                                     component: () => import('@/views/chairman/manage/paper.vue'),
                                     meta: {}
+                                },
+                                {
+                                    path: '/chairman/review',
+                                    name: 'chairman_review',
+                                    component: () => import('@/views/review/review.vue'),
+                                    meta: {}
                                 }
                             ]
                         })
