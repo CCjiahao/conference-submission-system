@@ -45,7 +45,7 @@
                     <router-link to="/chairman/manage/paper">论文管理界面</router-link>
                 </a-menu-item>
                 <a-menu-item key="chairman_manage_expertise">
-                    <router-link to="/chairman/manage/expertise">方向管理界面</router-link>
+                    <router-link to="/chairman/manage/expertise">研究领域管理</router-link>
                 </a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="publicity">
