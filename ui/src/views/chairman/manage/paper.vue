@@ -7,7 +7,7 @@
             </template>
             <template v-if="column.key === 'action'">
                 <span>
-                    <a type="primary" :href="'http://101.35.144.217:9875/api/download?uuid=' + record.paper"
+                    <a type="primary" :href="'http://198.211.5.158:9875/api/download?uuid=' + record.paper"
                         target="_blank">下载论文</a>
                     <template v-if="record.state !== '待审核'">
                         <a-divider type="vertical" />
@@ -92,7 +92,7 @@
             </template>
         </a-list>
 
-        <a-button type="primary" :href="'http://101.35.144.217:9875/api/download?uuid=' + paper.uuid" target="_blank">
+        <a-button type="primary" :href="'http://198.211.5.158:9875/api/download?uuid=' + paper.uuid" target="_blank">
             <template #icon>
                 <DownloadOutlined />
             </template>

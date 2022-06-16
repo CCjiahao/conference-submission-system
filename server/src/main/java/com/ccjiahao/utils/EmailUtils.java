@@ -40,18 +40,18 @@ public class EmailUtils {
 
     public void sendReviewRemain(String[] toEmails, String username, String title) {
         for (String toEmail : toEmails) {
-            sendEmail(toEmail, username + "投递了一篇名为《" + title + "》论文，欢迎你前来进行审阅。审阅地址：http://101.35.144.217:9876/review/hall。");
+            sendEmail(toEmail, username + "投递了一篇名为《" + title + "》论文，欢迎你前来进行审阅。审阅地址：http://198.211.5.158:9876/review/hall。");
         }
     }
 
     public void sendRebuttalRemain(String[] toEmails, String[] usernames, String title) {
         for(int i = 0; i < toEmails.length; i++) {
-            sendEmail(toEmails[i], usernames[i] + "你好，你作为作者/协作者投递的一篇名为《" + title + "》论文，已经被审稿人审阅，请尽早提交辩驳意见。辩驳地址：http://101.35.144.217:9876/submission/my。");
+            sendEmail(toEmails[i], usernames[i] + "你好，你作为作者/协作者投递的一篇名为《" + title + "》论文，已经被审稿人审阅，请尽早提交辩驳意见。辩驳地址：http://198.211.5.158:9876/submission/my。");
         }
     }
 
     public void sendReReviewRemain(String toEmail, String username, String title) {
-        sendEmail(toEmail, username + "已经就名为《" + title + "》的论文进行辩驳，请及时查阅，如有必要请尽快修改你的审阅意见。查看地址：http://101.35.144.217:9876/review/log。");
+        sendEmail(toEmail, username + "已经就名为《" + title + "》的论文进行辩驳，请及时查阅，如有必要请尽快修改你的审阅意见。查看地址：http://198.211.5.158:9876/review/log。");
     }
 
     public void sendReviewUpdate(String[] toEmails, String[] usernames, String title) {

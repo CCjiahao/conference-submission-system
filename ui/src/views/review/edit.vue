@@ -5,7 +5,7 @@
   <div>论文编号:{{ paper.id }}</div>
   <div>论文标题:{{ paper.title }}</div>
   <div>论文摘要:{{ paper.abstracts }}</div>
-  <a :href="'http://101.35.144.217:9875/api/download?uuid=' + paper.paper" target="_blank">下载论文</a>
+  <a :href="'http://198.211.5.158:9875/api/download?uuid=' + paper.paper" target="_blank">下载论文</a>
   <br>
   <a-divider />
   <div>
