@@ -22,13 +22,13 @@
                 <a-form-item name="country" :rules="[{ required: true, message: '请输入国家!' }]">
                     <a-input v-model:value="formState.country" v-show="false" placeholder="国家" />
                     <a-select placeholder="国家" label-in-value
-                        style="width: 100%" :options="countrys" @change="countryChange" />
+                        style="width: 100%;text-align: left;" :options="countrys" @change="countryChange" />
                 </a-form-item>
 
                 <a-form-item name="expertise" :rules="[{ required: true, message: '请输入所属领域!' }]">
                     <a-input v-model:value="formState.expertise" v-show="false" placeholder="所属领域" />
-                    <a-select mode="multiple" placeholder="所属领域" label-in-value
-                        style="width: 100%" :options="expertise_options" @change="expertiseChange" />
+                    <a-select mode="multiple" placeholder="所属领域" label-in-value 
+                        style="width: 100%;text-align: left;" :options="expertise_options" @change="expertiseChange" />
                 </a-form-item>
 
                 <a-form-item name="password"
@@ -149,7 +149,7 @@ const disabled = computed(() => {
 	background-color: #fff;
 	border-radius: 20px;
 	width: 350px;
-	height: 800px;
+	height: 600px;
 	margin: auto;
 	position: absolute;
 	top: 0;
