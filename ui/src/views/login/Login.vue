@@ -1,11 +1,10 @@
 <template>
-    <a-row justify="center">
-        <a-col :span="5">
+    <div class="main">
             <div class="logo">
                 <img src="@/assets/logo.png" />
                 <span class="title">ECNU期刊投稿系统</span>
             </div>
-            <p style="text-align: center;">East China Normal University 求实创造，为人师表</p>
+            <p style="text-align: center;color:gray">East China Normal University 求实创造，为人师表</p>
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
                 @finishFailed="onFinishFailed">
                 <a-form-item name="username" :rules="[{ required: true, message: '请输入用户名!' }]">
@@ -24,23 +23,24 @@
                     </a-input-password>
                 </a-form-item>
 
-                <div class="login-form-wrap">
-                    <a-form-item name="remember" no-style>
-                        <a-checkbox v-model:checked="formState.remember">15天免登录</a-checkbox>
+                <div class="login-form-wrap" >
+                    <a-form-item name="remember" style="text-align:left;">
+                        <a-checkbox v-model:checked="formState.remember">自动登录</a-checkbox>
                     </a-form-item>
+                </div>
+                <a-form-item>
+                <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button" block>
+                    登录
+                </a-button>
+                </a-form-item>
+                <div style="float:left;">
+                <a href="/register">注册账号</a>
+                </div>
+                <div style="float:right;">
                     <a class="login-form-forgot" href="/forget">忘记密码</a>
                 </div>
-
-                <a-form-item>
-                    <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
-                        登录
-                    </a-button>
-                    Or
-                    <a href="/register">注册</a>
-                </a-form-item>
             </a-form>
-        </a-col>
-    </a-row>
+    </div>
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
@@ -82,6 +82,21 @@ const disabled = computed(() => {
 });
 </script>
 <style scoped lang='scss'>
+.main {
+    text-align: center;
+	background-color: #fff;
+	border-radius: 20px;
+	width: 350px;
+	height: 400px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+
 .logo {
     height: 70px;
     border: none;
@@ -93,9 +108,9 @@ const disabled = computed(() => {
     color: #ffffff;
 
     img {
-        width: 25px;
-        height: 25px;
-        margin-left: 7px;
+        width: 40px;
+        height: 40px;
+        margin-left: -10px;
     }
 
     .title {
@@ -103,9 +118,9 @@ const disabled = computed(() => {
         text-align: center;
         color: #000000;
         box-sizing: border-box;
-        font-weight: 600;
+        font-weight: 350;
         line-height: 50px;
-        font-size: 13px;
+        font-size: 29px;
         vertical-align: middle;
     }
 }
