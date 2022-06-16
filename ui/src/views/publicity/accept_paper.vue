@@ -119,17 +119,23 @@ const columns = [
     }
 ];
 
-var papers: Ref<any[]> = ref([]);
+const papers: Ref<any[]> = ref([]);
 
 const getpapers = () => {
     papers.value = []
     GetPapersApi().then((res: any) => {
         if (res.errno === 0) {
-            papers.value = res.data['papers'];
+            for(var i=0;i<res.data['papers'].length;i++){
+                const paper = res.data['papers'][i];
+                if(paper.state == "已接收"){
+                    papers.value.push(paper)
+                }
+            }
         }
     })
 }
 getpapers();
+console.log(papers)
 
 const paper = ref({
     uuid: '',
