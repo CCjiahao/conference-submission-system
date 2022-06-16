@@ -149,7 +149,12 @@ onMounted(() => {
         GetPaperBySubmitTimeApi(30).then((res: any) => {
             if (res.errno === 0) {
                 submissionChart.setOption({
-                    tooltip: {},
+                    tooltip: {
+                        trigger: 'axis', //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                        axisPointer: {// 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    }, 
                     xAxis: { data: res.data['label'] },
                     yAxis: {},
                     series: [
@@ -171,7 +176,12 @@ onMounted(() => {
         GetPaperByReviewTimeApi(30).then((res: any) => {
             if (res.errno === 0) {
                 reviewNumChart.setOption({
-                    tooltip: {},
+                    tooltip: {
+                        trigger: 'axis', //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                        axisPointer: {// 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    }, 
                     xAxis: { data: res.data['label'] },
                     yAxis: {},
                     series: [
@@ -179,7 +189,18 @@ onMounted(() => {
                             name: "审稿数量",
                             type: "line",
                             data: res.data['value'],
-                            areaStyle: {}
+                            areaStyle: {
+                                color: '#91cc75',
+                                opacity: 0.5
+                            },
+                            itemStyle : {
+								normal : {
+									color:'#91cc75',
+									lineStyle:{
+										color:'#91cc75'
+									}
+								}
+							},
                         },
                     ],
                 });
