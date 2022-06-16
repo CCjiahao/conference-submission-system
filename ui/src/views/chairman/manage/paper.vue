@@ -201,10 +201,8 @@ const paper = ref({
 const paperid = ref(0);
 const visible = ref<boolean>(false);
 const showDrawer = (id: number) => {
-    console.log(id)
     paperid.value = id;
     GetPaperDetailByIdApi(id).then((res: any) => {
-        console.log(res)
         if (res.errno === 0) {
             paper.value = res.data['detail'];
             visible.value = true;
@@ -240,7 +238,6 @@ const showConfirm = (value: any) => {
 };
 
 const acceptPaper = (id: any) => {
-    console.log(id)
     const token = localStorage.getItem('token');
     if (token) {
         AcceptPaperApi(token, id).then((res: any) => {
@@ -255,7 +252,6 @@ const acceptPaper = (id: any) => {
 }
 
 const rejectPaper = (id: any) => {
-    console.log(id)
     const token = localStorage.getItem('token');
     if (token) {
         RejectPaperApi(token, id).then((res: any) => {
