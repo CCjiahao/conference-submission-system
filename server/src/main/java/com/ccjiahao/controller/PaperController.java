@@ -180,6 +180,48 @@ public class PaperController {
         return Feedback.info(data);
     }
 
+    @GetMapping("/api/getPaperByReviewTime")
+    public String getPaperByReviewTime(@RequestParam int days) {
+        List<Review> reviews = reviewMapper.selectList(null);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        List<String> names = new ArrayList<>();
+        int[] counts = new int[days];
+        for(int i = days - 1; i >= 0; i--) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, -i);
+            names.add(sdf.format(calendar.getTime()));
+            counts[i] = 0;
+        }
+
+        for (Review review : reviews) {
+            String day = sdf.format(review.getReviewTime());
+            if(names.contains(day)) {
+                for(int i = 0; i < names.size(); i++) {
+                    if(names.get(i).equals(day)) {
+                        counts[i] += 1;
+                    }
+                }
+            }
+        }
+
+        // 去除前置0
+        boolean flag = true;
+        List<String> _names = new ArrayList<>();
+        List<Integer> _counts = new ArrayList<>();
+        for(int i = 0; i < days; i++) {
+            if(counts[i] == 0 && flag) continue;
+            flag = false;
+            _names.add(names.get(i));
+            _counts.add(counts[i]);
+        }
+
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("label", _names.toArray());
+        data.put("value", _counts.toArray());
+        return Feedback.info(data);
+    }
+
     @GetMapping("/api/getPapers")
     public String getPapers() {
         Dictionary<String, Object> data = new Hashtable<>();

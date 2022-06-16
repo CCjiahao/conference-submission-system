@@ -68,7 +68,7 @@ export const GetPaperExpertiseDistributionApi = () => instance.get('/api/getPape
 // 获取论文投稿时间分布
 export const GetPaperBySubmitTimeApi = (days: number) => instance.get('/api/getPaperBySubmitTime?days=' + days)
 // 获取论文审稿时间分布
-export const GetPaperByReviewTimeApi = () => instance.get('/api/getPaperByReviewTime')
+export const GetPaperByReviewTimeApi = (days: number) => instance.get('/api/getPaperByReviewTime?days=' + days)
 
 // 获取expertise列表
 export const GetExpertisesApi = () => instance.get('/api/getExpertises')
