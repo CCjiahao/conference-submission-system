@@ -77,6 +77,52 @@ public class PaperController {
         return Feedback.info(data);
     }
 
+    @GetMapping("/api/getPaperProcessDistribution")
+    public String getPaperProcessDistribution(){
+        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
+
+        int waitForReviewPaperNumber = 0;
+        int waitForRebuttalPaperNumber = 0;
+        int rebuttaledPaperNumber = 0;
+        int ConfirmedPaperNumber = 0;
+        int AcceptedPaperNumber = 0;
+        int RejectedPaperNumber = 0;
+
+        for(int i = 0; i < papers.size(); i++){
+            switch(papers.get(i).getState()){
+                case "待审核" :
+                    waitForReviewPaperNumber++;
+                    break;
+                case "待辩论" :
+                    waitForRebuttalPaperNumber++;
+                    break;
+                case "已辩论" :
+                    rebuttaledPaperNumber++;
+                    break;
+                case "已确认" :
+                    ConfirmedPaperNumber++;
+                    break;
+                case "已接收" :
+                    AcceptedPaperNumber++;
+                    break;
+                case "已拒绝" :
+                    RejectedPaperNumber++;
+                    break;
+            }
+        }
+
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("waitForReviewPaperNumber", waitForReviewPaperNumber);
+        data.put("waitForRebuttalPaperNumber", waitForRebuttalPaperNumber);
+        data.put("rebuttaledPaperNumber", rebuttaledPaperNumber);
+        data.put("ConfirmedPaperNumber", ConfirmedPaperNumber);
+        data.put("AcceptedPaperNumber", AcceptedPaperNumber);
+        data.put("RejectedPaperNumber", RejectedPaperNumber);
+
+        return Feedback.info(data);
+    }
+
+
     @GetMapping("/api/getPapers")
     public String getPapers() {
         Dictionary<String, Object> data = new Hashtable<>();

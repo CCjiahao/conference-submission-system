@@ -19,7 +19,7 @@
       </a-col>
       <a-col :span="6">
         <a-card>
-          <a-statistic title="当前待审核投稿数" :value="35" />
+          <a-statistic title="当前待审核投稿数" :value="waitForReviewPaperNumber"/>
         </a-card>
       </a-col>
     </a-row>
@@ -99,6 +99,39 @@ const getYesterdayPaperNumber = () => {
 }
 getYesterdayPaperNumber();
 
+//以下是有问题的代码
+
+const paperProcessDistribution: Ref<any[]> = ref([]);
+const waitForReviewPaperNumber: Ref<any[]> = ref([]);
+const numbersTemp: { value: string }[] = [];
+
+const getPaperProcessDistribution = () => {
+    paperProcessDistribution.value = []
+    GetPaperProcessDistributionApi().then((res: any) => {
+        if (res.errno === 0) {
+            // paperProcessDistribution.value = res.data;
+
+            paperProcessDistribution.value.push(res.data['waitForReviewPaperNumber']);
+            paperProcessDistribution.value.push(res.data['waitForRebuttalPaperNumber']);
+            
+            numbersTemp.push(res.data['waitForReviewPaperNumber']);
+            numbersTemp.push(res.data['waitForRebuttalPaperNumber']);
+
+            waitForReviewPaperNumber.value = res.data['waitForReviewPaperNumber'];
+        }
+    })
+}
+getPaperProcessDistribution();
+
+console.log("paperProcessDistribution.value",paperProcessDistribution.value);
+console.log("paperProcessDistribution.value[0]",paperProcessDistribution.value[0]);
+
+console.log("numbersTemp",numbersTemp);
+console.log("numbersTemp[0]",numbersTemp[0]);
+
+console.log("waitForReviewPaperNumber",waitForReviewPaperNumber);
+
+
 onMounted(() => {//需要获取到element,所以是onMounted的Hook
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
     let reviewNumChart = echarts.init(document.getElementById("reviewNumChart") as HTMLElement);
@@ -139,23 +172,39 @@ onMounted(() => {//需要获取到element,所以是onMounted的Hook
     });
 
     reviewProcessChart.setOption({
+        // dataset: paperProcessDistribution,
         series: [
             {
                 type: 'pie',
-                data: [
+                data: 
+                // paperProcessDistribution
+                [
                     {
-                    value: 335,
+                    value: numbersTemp[0],
                     name: 'A'
                     },
-                    {
-                    value: 234,
-                    name: 'B'
-                    },
-                    {
-                    value: 1548,
-                    name: 'C'
-                    }
-                ],
+                    // {
+                    // value: waitForRebuttalPaperNumber,
+                    // name: 'B'
+                    // },
+                    // {
+                    // value: rebuttaledPaperNumber,
+                    // name: 'C'
+                    // },
+                    // {
+                    // value: ConfirmedPaperNumber,
+                    // name: 'A'
+                    // },
+                    // {
+                    // value: AcceptedPaperNumber,
+                    // name: 'B'
+                    // },
+                    // {
+                    // value: RejectedPaperNumber,
+                    // name: 'C'
+                    // }
+                ]
+                ,
                 radius: ['40%', '70%']
             }
         ]
