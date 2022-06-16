@@ -146,6 +146,8 @@ const handleAdd = () => {
             if (res.errno === 0) {
                 message.info("添加成功！");
                 getExpertises();
+                formState.name = '';
+                formState.description = '';
                 visible.value = false;
             }
         })

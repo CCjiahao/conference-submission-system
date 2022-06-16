@@ -42,7 +42,7 @@
 
                 <a-form-item name="code" :rules="[{ required: true, message: '请输入验证码!' }]">
                     <a-input-group compact>
-                        <a-input v-model:value="formState.code" style="width: calc(100% - 100px)" />
+                        <a-input v-model:value="formState.code" style="width: calc(100% - 100px); text-align: left;" />
                         <a-button type="primary" style="width: 100px;" @click="getCode">获取验证码</a-button>
                     </a-input-group>
                 </a-form-item>
