@@ -93,23 +93,19 @@ const getYesterdayPaperNumber = () => {
 }
 getYesterdayPaperNumber();
 
-const paperProcessDistribution: Ref<number[]> = ref([]);
 const waitForReviewPaperNumber: Ref<number> = ref(0);
-const paperExpertiseDistribution: Ref<number[]> = ref([]);
 
 onMounted(() => {
     const getPaperProcessDistribution = () => {
-        paperProcessDistribution.value = []
         GetPaperProcessDistributionApi().then((res: any) => {
             if (res.errno === 0) {
                 console.log(res)
-                paperProcessDistribution.value = res.data;
                 waitForReviewPaperNumber.value = res.data[0]['value'];
                 reviewProcessChart.setOption({
                     series: [
                         {
                             type: 'pie',
-                            data: paperProcessDistribution.value,
+                            data: res.data,
                             radius: ['40%', '70%']
                         }
                     ]
@@ -119,17 +115,14 @@ onMounted(() => {
     }
     getPaperProcessDistribution();
 
-
     const getPaperExpertiseDistribution = () => {
-        paperExpertiseDistribution.value = []
         GetPaperExpertiseDistributionApi().then((res: any) => {
             if (res.errno === 0) {
                 console.log(res)
-                paperExpertiseDistribution.value = res.data;
                 paperChart.setOption({
                     series: [{
                         type: 'pie',
-                        data: paperExpertiseDistribution.value,
+                        data: res.data,
                         radius: ['40%', '70%']
                     }]
                 });
@@ -137,28 +130,35 @@ onMounted(() => {
         })
     }
     getPaperExpertiseDistribution();
+
+    const getPaperBySubmitTime = () => {
+        GetPaperBySubmitTimeApi(30).then((res: any) => {
+            if (res.errno === 0) {
+                console.log(res)
+                submissionChart.setOption({
+                    tooltip: {},
+                    xAxis: {data: res.data['label']},
+                    yAxis: {},
+                    series: [
+                        {
+                            name: "论文数量",
+                            type: "line",
+                            data: res.data['value'],
+                            areaStyle: {}
+                        },
+                    ],
+                });
+            }
+        })
+    }
+    getPaperBySubmitTime();
+
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
     let reviewNumChart = echarts.init(document.getElementById("reviewNumChart") as HTMLElement);
     let reviewProcessChart = echarts.init(document.getElementById("reviewProcessChart") as HTMLElement);
     let paperChart = echarts.init(document.getElementById("paperChart") as HTMLElement);
 
     // 绘制图表
-    submissionChart.setOption({
-        tooltip: {},
-        xAxis: {
-            data: ["12-3", "12-4", "12-5", "12-6", "12-7", "12-8"],
-        },
-        yAxis: {},
-        series: [
-            {
-                name: "用户量",
-                type: "line",
-                data: [5, 20, 36, 10, 10, 20],
-                areaStyle: {}
-            },
-        ],
-    });
-
     reviewNumChart.setOption({
         tooltip: {},
         xAxis: {
