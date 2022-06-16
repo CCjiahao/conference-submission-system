@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue';
 // 创建实例
 const instance = axios.create({
     timeout: 15000,
-    baseURL: 'http://localhost:8081'
+    baseURL: 'http://localhost:9875'
 })
 
 // 请求拦截器
