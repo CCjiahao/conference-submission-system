@@ -58,8 +58,8 @@
     </a-row>
 </template>
 <script setup lang="ts">
-import { reactive, computed } from 'vue';
-import { GetVerificationCodeApi } from '@/request/api'
+import { reactive, computed, Ref, ref } from 'vue';
+import { GetVerificationCodeApi, GetExpertisesApi } from '@/request/api'
 import { message } from 'ant-design-vue';
 import countrys from '@/variable/countrys'
 import { RegisterApi } from '@/request/api'
@@ -87,10 +87,15 @@ const formState = reactive<FormState>({
     code: '',
 });
 
-const expertise_options: { value: string }[] = [];
-expertise_options.push({ value: 'CV' })
-expertise_options.push({ value: 'NLP' })
-expertise_options.push({ value: 'ML' })
+const expertise_options: Ref<{ value: string }[]> = ref([]);
+GetExpertisesApi().then((res: any) => {
+    if (res.errno === 0) {
+        const expertises = res.data['expertises'];
+        for (var i = 0; i < expertises.length; i++) {
+            expertise_options.value.push({ value: expertises[i]['name'] });
+        }
+    }
+})
 
 const countryChange = (value: any) => {
     formState.country = value['value'];

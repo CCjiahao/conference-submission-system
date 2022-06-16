@@ -78,7 +78,7 @@
 import { ref, reactive } from 'vue'
 import { message, UploadChangeParam, Upload } from 'ant-design-vue';
 import { checkEmail } from '@/utils/index'
-import { GetUserByEmailApi, SubmitPaperApi } from '@/request/api';
+import { GetUserByEmailApi, SubmitPaperApi, GetExpertisesApi } from '@/request/api';
 import type { Ref } from 'vue';
 import { steps, columns } from '@/variable/submission_paper'
 import { userStore } from '@/store/user';
@@ -116,10 +116,15 @@ const paperState = reactive<PaperState>({
     paper: '',
 });
 
-const expertise_options: { value: string }[] = [];
-expertise_options.push({ value: 'CV' })
-expertise_options.push({ value: 'NLP' })
-expertise_options.push({ value: 'ML' })
+const expertise_options: Ref<{ value: string }[]> = ref([]);
+GetExpertisesApi().then((res: any) => {
+    if (res.errno === 0) {
+        const expertises = res.data['expertises'];
+        for (var i = 0; i < expertises.length; i++) {
+            expertise_options.value.push({ value: expertises[i]['name'] });
+        }
+    }
+})
 
 const expertiseChange = (values: any) => {
     paperState.expertise = values.value

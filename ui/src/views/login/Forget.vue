@@ -43,8 +43,8 @@
     </a-row>
 </template>
 <script setup lang="ts">
-import { reactive, computed } from 'vue';
-import { GetVerificationCodeByUsernameAndEmailApi, ForgetApi } from '@/request/api'
+import { reactive, computed, Ref, ref } from 'vue';
+import { GetVerificationCodeByUsernameAndEmailApi, ForgetApi, GetExpertisesApi } from '@/request/api'
 import { message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 
@@ -62,11 +62,6 @@ const formState = reactive<FormState>({
     password2: '',
     code: '',
 });
-
-const expertise_options: { value: string }[] = [];
-expertise_options.push({ value: 'CV' })
-expertise_options.push({ value: 'NLP' })
-expertise_options.push({ value: 'ML' })
 
 const router = useRouter();
 const onFinish = (values: any) => {

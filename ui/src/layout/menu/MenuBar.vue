@@ -44,6 +44,9 @@
                 <a-menu-item key="chairman_manage_paper">
                     <router-link to="/chairman/manage/paper">论文管理界面</router-link>
                 </a-menu-item>
+                <a-menu-item key="chairman_manage_expertise">
+                    <router-link to="/chairman/manage/expertise">方向管理界面</router-link>
+                </a-menu-item>
             </a-sub-menu>
         </a-menu>
     </div>
@@ -75,6 +78,7 @@ var routeMap: { [key: string]: [string, string]; } = {
     "/chairman/index" : ["chairman", "chairman_index"],
     "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
     "/chairman/manage/paper" : ["chairman", "chairman_manage_paper"],
+    "/chairman/manage/expertise" : ["chairman", "chairman_manage_expertise"],
     "/chairman/review" : ["chairman", "chairman_manage_paper"],
 };
 
