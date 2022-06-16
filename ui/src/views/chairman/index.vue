@@ -93,87 +93,126 @@ const getYesterdayPaperNumber = () => {
 }
 getYesterdayPaperNumber();
 
-const paperProcessDistribution: Ref<number[]> = ref([]);
 const waitForReviewPaperNumber: Ref<number> = ref(0);
-const paperExpertiseDistribution: Ref<number[]> = ref([]);
 
 onMounted(() => {
     const getPaperProcessDistribution = () => {
-        paperProcessDistribution.value = []
         GetPaperProcessDistributionApi().then((res: any) => {
             if (res.errno === 0) {
-                console.log(res)
-                paperProcessDistribution.value = res.data;
                 waitForReviewPaperNumber.value = res.data[0]['value'];
                 reviewProcessChart.setOption({
                     series: [
                         {
                             type: 'pie',
-                            data: paperProcessDistribution.value,
+                            data: res.data,
                             radius: ['40%', '70%']
                         }
-                    ]
+                    ],
+                    tooltip: {//提示框组件
+                        trigger: 'item', //item数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+                        axisPointer: {
+                            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        formatter: '{b} : {c} <br/>百分比 : {d}%' //{b}（数据项名称），{c}（数值）, {d}（百分比）
+                    }
                 });
             }
         })
     }
     getPaperProcessDistribution();
 
-
     const getPaperExpertiseDistribution = () => {
-        paperExpertiseDistribution.value = []
         GetPaperExpertiseDistributionApi().then((res: any) => {
             if (res.errno === 0) {
-                console.log(res)
-                paperExpertiseDistribution.value = res.data;
                 paperChart.setOption({
                     series: [{
                         type: 'pie',
-                        data: paperExpertiseDistribution.value,
+                        data: res.data,
                         radius: ['40%', '70%']
-                    }]
+                    }],
+                    tooltip: {//提示框组件
+                        trigger: 'item', //item数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+                        axisPointer: {
+                            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        formatter: '{b} : {c} <br/>百分比 : {d}%' //{b}（数据项名称），{c}（数值）, {d}（百分比）
+                    }
                 });
             }
         })
     }
     getPaperExpertiseDistribution();
+
+    const getPaperBySubmitTime = () => {
+        GetPaperBySubmitTimeApi(30).then((res: any) => {
+            if (res.errno === 0) {
+                submissionChart.setOption({
+                    tooltip: {
+                        trigger: 'axis', //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                        axisPointer: {// 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    }, 
+                    xAxis: { data: res.data['label'] },
+                    yAxis: {},
+                    series: [
+                        {
+                            name: "论文数量",
+                            type: "line",
+                            data: res.data['value'],
+                            areaStyle: {}
+                        },
+                    ],
+                });
+            }
+        })
+    }
+    getPaperBySubmitTime();
+
+
+    const getPaperByReviewTime = () => {
+        GetPaperByReviewTimeApi(30).then((res: any) => {
+            if (res.errno === 0) {
+                reviewNumChart.setOption({
+                    tooltip: {
+                        trigger: 'axis', //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                        axisPointer: {// 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    }, 
+                    xAxis: { data: res.data['label'] },
+                    yAxis: {},
+                    series: [
+                        {
+                            name: "审稿数量",
+                            type: "line",
+                            data: res.data['value'],
+                            areaStyle: {
+                                color: '#91cc75',
+                                opacity: 0.5
+                            },
+                            itemStyle : {
+								normal : {
+									color:'#91cc75',
+									lineStyle:{
+										color:'#91cc75'
+									}
+								}
+							},
+                        },
+                    ],
+                });
+            }
+        })
+    }
+    getPaperByReviewTime();
+
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
     let reviewNumChart = echarts.init(document.getElementById("reviewNumChart") as HTMLElement);
     let reviewProcessChart = echarts.init(document.getElementById("reviewProcessChart") as HTMLElement);
     let paperChart = echarts.init(document.getElementById("paperChart") as HTMLElement);
-
-    // 绘制图表
-    submissionChart.setOption({
-        tooltip: {},
-        xAxis: {
-            data: ["12-3", "12-4", "12-5", "12-6", "12-7", "12-8"],
-        },
-        yAxis: {},
-        series: [
-            {
-                name: "用户量",
-                type: "line",
-                data: [5, 20, 36, 10, 10, 20],
-                areaStyle: {}
-            },
-        ],
-    });
-
-    reviewNumChart.setOption({
-        tooltip: {},
-        xAxis: {
-            data: ["12-3", "12-4", "12-5", "12-6", "12-7", "12-8"],
-        },
-        yAxis: {},
-        series: [
-            {
-                name: "用户量",
-                type: "line",
-                data: [5, 20, 36, 10, 10, 20],
-                areaStyle: {}
-            },
-        ],
-    });
 
     window.onresize = function () {//自适应大小
         submissionChart.resize();
