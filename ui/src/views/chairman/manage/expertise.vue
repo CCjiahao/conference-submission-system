@@ -1,7 +1,7 @@
 <template>
     <div>
-        <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="showModal">添加新的方向</a-button>
-        <a-modal v-model:visible="visible" title="添加新的方向" @ok="handleAdd">
+        <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="showModal">新增研究领域</a-button>
+        <a-modal v-model:visible="visible" title="新增研究领域" @ok="handleAdd">
             <a-form :model="formState" name="basic" autocomplete="off">
                 <a-form-item label="名称" name="name" :rules="[{ required: true, message: '请输入名称' }]">
                     <a-input v-model:value="formState.name" />
