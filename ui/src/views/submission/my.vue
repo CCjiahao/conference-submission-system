@@ -33,7 +33,7 @@
             <a-descriptions-item label="提交时间">{{ paper.commitTime }}</a-descriptions-item>
             <a-descriptions-item label="投递流程" > 
                 <a-timeline mode="left">
-                <template v-if="paper.state==='待审阅'">
+                <template v-if="paper.state==='待审核'">
                 <a-timeline-item color="green">提交</a-timeline-item>
                 <a-timeline-item color="blue">审阅</a-timeline-item>
                 <a-timeline-item color="grey">辩驳</a-timeline-item>
