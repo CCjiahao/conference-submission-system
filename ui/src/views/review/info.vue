@@ -177,7 +177,6 @@ const showDrawer = (id: number) => {
     GetPaperDetailByIdApi(id).then((res: any) => {
         if (res.errno === 0) {
             paper.value = res.data['detail'];
-            console.log(res.data['detail']);
             visible.value = true;
         }
     })
