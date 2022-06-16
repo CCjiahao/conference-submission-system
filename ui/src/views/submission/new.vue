@@ -26,6 +26,10 @@
                     <a-select placeholder="论文分类" label-in-value style="width: 100%" :options="expertise_options"
                         @change="expertiseChange" />
                 </a-form-item>
+                <a-form-item name="keywords" v-show="steps[current].step == 1"
+                    :rules="[{ required: true, message: '请输入论文关键字!' }]">
+                    <a-input v-model:value="paperState.keywords" placeholder="论文关键字" />
+                </a-form-item>
 
                 <a-form-item v-show="steps[current].step == 1" name="collaborators">
                     <a-input-group compact>
@@ -102,6 +106,7 @@ interface PaperState {
     title: string;
     abstract: string;
     expertise: string;
+    keywords:string;
     collaborators: string;
     new_collaborator: string;
     paper: string;
@@ -111,6 +116,7 @@ const paperState = reactive<PaperState>({
     title: '',
     abstract: '',
     expertise: '',
+    keywords:'',
     collaborators: '',
     new_collaborator: '',
     paper: '',
@@ -212,7 +218,7 @@ const onFinish = (values: any) => {
         message.error("登陆已过期");
         return;
     }
-    SubmitPaperApi(token, paperState.title, paperState.abstract, paperState.expertise, paperState.collaborators, paperState.paper).then((res: any) => {
+    SubmitPaperApi(token, paperState.title, paperState.abstract, paperState.expertise,paperState.keywords, paperState.collaborators, paperState.paper).then((res: any) => {
         if (res.errno === 0) {
             message.info("论文提交成功");
             current.value++;

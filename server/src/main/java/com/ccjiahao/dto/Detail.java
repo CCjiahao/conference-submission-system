@@ -13,6 +13,7 @@ public class Detail {
     private String title;
     private String abstracts;
     private String expertise;
+    private String keywords;
     private Date commitTime;
     private String state;
     private List<Author> authors;

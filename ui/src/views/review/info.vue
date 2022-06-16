@@ -54,6 +54,7 @@
       <a-descriptions-item label="所属领域">{{ paper.expertise }}</a-descriptions-item>
       <a-descriptions-item label="论文状态">{{ paper.state }}</a-descriptions-item>
       <a-descriptions-item label="论文摘要" :span="3">{{ paper.abstracts }}</a-descriptions-item>
+      <a-descriptions-item label="关键字">{{ paper.keywords }}</a-descriptions-item>
       <a-descriptions-item label="提交时间">{{ paper.commitTime }}</a-descriptions-item>
       <a-descriptions-item label="投递流程" > 
                 <a-timeline mode="left">
@@ -156,6 +157,7 @@ const paper = ref({
     title: '',
     abstracts: '',
     expertise: '',
+    keywords:'',
     commitTime: '',
     state: '',
     authors: [
@@ -175,6 +177,7 @@ const showDrawer = (id: number) => {
     GetPaperDetailByIdApi(id).then((res: any) => {
         if (res.errno === 0) {
             paper.value = res.data['detail'];
+            console.log(res.data['detail']);
             visible.value = true;
         }
     })

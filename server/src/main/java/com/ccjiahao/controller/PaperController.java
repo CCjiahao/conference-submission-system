@@ -37,7 +37,7 @@ public class PaperController {
     public String submitPaper(@RequestBody Paper paper) {
         try {
             String username = TokenUtils.getUserByToken(paper.getToken());
-            com.ccjiahao.entity.Paper paper1 = new com.ccjiahao.entity.Paper(0, username, paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCollaborators(), paper.getPaper(), new Date(System.currentTimeMillis()), "待审核");
+            com.ccjiahao.entity.Paper paper1 = new com.ccjiahao.entity.Paper(0, username, paper.getTitle(), paper.getAbstracts(), paper.getExpertise(),paper.getKeywords(), paper.getCollaborators(), paper.getPaper(), new Date(System.currentTimeMillis()), "待审核");
             paperMapper.insert(paper1);
             List<User> users = userMapper.selectList(null);
             List<String> emails = new ArrayList<String>();
@@ -345,7 +345,7 @@ public class PaperController {
             Author author = new Author(user.getUsername(), user.getName(), user.getEmail(), user.getSchool(), user.getCountry());
             authors.add(author);
         }
-        Detail detail = new Detail(paper.getPaper(), paper.getTitle(), paper.getAbstracts(), paper.getExpertise(), paper.getCommitTime(), paper.getState(), authors);
+        Detail detail = new Detail(paper.getPaper(), paper.getTitle(), paper.getAbstracts(), paper.getExpertise(),paper.getKeywords(), paper.getCommitTime(), paper.getState(), authors);
         Dictionary<String, Object> data = new Hashtable<>();
         data.put("detail", detail);
         return Feedback.info(data);

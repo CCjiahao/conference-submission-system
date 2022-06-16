@@ -17,7 +17,7 @@ export const ForgetApi = (username: string, password: string, email: string, cod
 // 根据邮箱获取用户信息
 export const GetUserByEmailApi = (email: string) => instance.get('/api/getUserByEmail?email=' + email)
 // 提交论文
-export const SubmitPaperApi = (token: string, title: string, abstracts: string, expertise: string, collaborators: string, paper: string) => instance.post('/api/submitPaper', { token: token, title: title, abstracts: abstracts, expertise: expertise, collaborators: collaborators, paper: paper })
+export const SubmitPaperApi = (token: string, title: string, abstracts: string, expertise: string,keywords:string, collaborators: string, paper: string) => instance.post('/api/submitPaper', { token: token, title: title, abstracts: abstracts, expertise: expertise, keywords:keywords,collaborators: collaborators, paper: paper })
 // 获取全部论文
 export const GetPapersApi = () => instance.get('/api/getPapers')
 // 获取全部论文及负责的审稿人信息

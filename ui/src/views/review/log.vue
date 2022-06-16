@@ -36,6 +36,7 @@
             <a-descriptions-item label="所属领域">{{ paper.expertise }}</a-descriptions-item>
             <a-descriptions-item label="论文状态">{{ paper.state }}</a-descriptions-item>
             <a-descriptions-item label="论文摘要" :span="3">{{ paper.abstracts }}</a-descriptions-item>
+            <a-descriptions-item label="关键字">{{ paper.keywords }}</a-descriptions-item>
             <a-descriptions-item label="提交时间">{{ paper.commitTime }}</a-descriptions-item>
             <a-descriptions-item label="投递流程" > 
                 <a-timeline mode="left">
@@ -157,6 +158,7 @@ const paper = ref({
     uuid: '',
     title: '',
     abstracts: '',
+    keywords:'',
     expertise: '',
     commitTime: '',
     state: '',

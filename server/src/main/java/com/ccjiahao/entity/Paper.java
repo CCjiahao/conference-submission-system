@@ -14,6 +14,7 @@ public class Paper {
     private String title;
     private String abstracts;
     private String expertise;
+    private String keywords;
     private String collaborators;
     private String paper;
     private Date commitTime;
