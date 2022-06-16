@@ -48,6 +48,15 @@
                     <router-link to="/chairman/manage/expertise">方向管理界面</router-link>
                 </a-menu-item>
             </a-sub-menu>
+            <a-sub-menu key="publicity">
+                <template #icon>
+                    <file-done-outlined />
+                </template>
+                <template #title>公示</template>
+                <a-menu-item key="publicity_accept_paper">
+                    <router-link to="/publicity/accept_paper">中选文章</router-link>
+                </a-menu-item>
+            </a-sub-menu>
         </a-menu>
     </div>
 </template>
@@ -67,19 +76,20 @@ const router = useRoute()
 
 // 定义路由对应的key
 var routeMap: { [key: string]: [string, string]; } = {
-    "/submission/my" : ["submission", "my_submission"],
-    "/submission/rebuttal" : ["submission", "my_submission"],
-    "/submission/new" : ["submission", "new_submission"],
-    "/review/info" : ["review", "review_info"],
-    "/review/hall" : ["review", "review_hall"],
-    "/review/log" : ["review", "review_log"],
-    "/review/review" : ["review", "review_log"],
-    "/review/edit":["review","review_log"],
-    "/chairman/index" : ["chairman", "chairman_index"],
-    "/chairman/manage/user" : ["chairman", "chairman_manage_user"],
-    "/chairman/manage/paper" : ["chairman", "chairman_manage_paper"],
-    "/chairman/manage/expertise" : ["chairman", "chairman_manage_expertise"],
-    "/chairman/review" : ["chairman", "chairman_manage_paper"],
+    "/publicity/accept_paper": ["publicity", "publicity_accept_paper"],
+    "/submission/my": ["submission", "my_submission"],
+    "/submission/rebuttal": ["submission", "my_submission"],
+    "/submission/new": ["submission", "new_submission"],
+    "/review/info": ["review", "review_info"],
+    "/review/hall": ["review", "review_hall"],
+    "/review/log": ["review", "review_log"],
+    "/review/review": ["review", "review_log"],
+    "/review/edit": ["review", "review_log"],
+    "/chairman/index": ["chairman", "chairman_index"],
+    "/chairman/manage/user": ["chairman", "chairman_manage_user"],
+    "/chairman/manage/paper": ["chairman", "chairman_manage_paper"],
+    "/chairman/manage/expertise": ["chairman", "chairman_manage_expertise"],
+    "/chairman/review": ["chairman", "chairman_manage_paper"],
 };
 
 // 定义menu的状态
@@ -91,7 +101,7 @@ const menuState = reactive({
 
 // 每次只能打开一个菜单
 const onOpenChange = (openKeys: string[]) => {
-    if(openKeys.length >= 2) {
+    if (openKeys.length >= 2) {
         menuState.openKeys = [openKeys[openKeys.length - 1]]
     }
 };

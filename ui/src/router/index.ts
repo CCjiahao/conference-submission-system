@@ -19,6 +19,18 @@ const routes: Array<RouteRecordRaw> = [
         path: '/forget',
         name: 'forget',
         component: () => import('@/views/login/Forget.vue')
+    },
+    {
+        path: '/publicity',
+        name: 'publicity',
+        component: Layout,
+        meta: {},
+        children: [{
+            path: '/publicity/accept_paper',
+            name: 'publicity_accept_paper',
+            component: () => import('@/views/publicity/accept_paper.vue'),
+            meta: {}
+        }]
     }
 ]
 
@@ -44,7 +56,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/submission/my'
                         })
-                        if(to.fullPath == '/review/info' || to.fullPath == '/chairman/index') {
+                        if (to.fullPath == '/review/info' || to.fullPath == '/chairman/index') {
                             to.fullPath = '/submission/my';
                         }
                     }
@@ -54,7 +66,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/review/info'
                         })
-                        if(to.fullPath == '/submission/my' || to.fullPath == '/chairman/index') {
+                        if (to.fullPath == '/submission/my' || to.fullPath == '/chairman/index') {
                             to.fullPath = '/review/info';
                         }
                     }
@@ -64,7 +76,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/chairman/index'
                         })
-                        if(to.fullPath == '/review/info' || to.fullPath == '/submission/my') {
+                        if (to.fullPath == '/review/info' || to.fullPath == '/submission/my') {
                             to.fullPath = '/chairman/index';
                         }
                     }
