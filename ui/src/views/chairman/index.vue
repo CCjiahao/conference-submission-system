@@ -95,6 +95,7 @@ getYesterdayPaperNumber();
 
 const paperProcessDistribution: Ref<number[]> = ref([]);
 const waitForReviewPaperNumber: Ref<number> = ref(0);
+const paperExpertiseDistribution: Ref<number[]> = ref([]);
 
 onMounted(() => {
     const getPaperProcessDistribution = () => {
@@ -117,6 +118,25 @@ onMounted(() => {
         })
     }
     getPaperProcessDistribution();
+
+
+    const getPaperExpertiseDistribution = () => {
+        paperExpertiseDistribution.value = []
+        GetPaperExpertiseDistributionApi().then((res: any) => {
+            if (res.errno === 0) {
+                console.log(res)
+                paperExpertiseDistribution.value = res.data;
+                paperChart.setOption({
+                    series: [{
+                        type: 'pie',
+                        data: paperExpertiseDistribution.value,
+                        radius: ['40%', '70%']
+                    }]
+                });
+            }
+        })
+    }
+    getPaperExpertiseDistribution();
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
     let reviewNumChart = echarts.init(document.getElementById("reviewNumChart") as HTMLElement);
     let reviewProcessChart = echarts.init(document.getElementById("reviewProcessChart") as HTMLElement);
@@ -153,30 +173,6 @@ onMounted(() => {
                 areaStyle: {}
             },
         ],
-    });
-
-
-    paperChart.setOption({
-        series: [
-            {
-                type: 'pie',
-                data: [
-                    {
-                        value: 335,
-                        name: 'A'
-                    },
-                    {
-                        value: 234,
-                        name: 'B'
-                    },
-                    {
-                        value: 1548,
-                        name: 'C'
-                    }
-                ],
-                radius: ['40%', '70%']
-            }
-        ]
     });
 
     window.onresize = function () {//自适应大小

@@ -3,6 +3,7 @@ package com.ccjiahao.controller;
 import com.ccjiahao.dto.*;
 import com.ccjiahao.entity.Review;
 import com.ccjiahao.entity.User;
+import com.ccjiahao.mapper.ExpertiseMapper;
 import com.ccjiahao.mapper.PaperMapper;
 import com.ccjiahao.mapper.ReviewMapper;
 import com.ccjiahao.mapper.UserMapper;
@@ -19,13 +20,15 @@ public class PaperController {
     private final UserMapper userMapper;
     private final PaperMapper paperMapper;
     private final ReviewMapper reviewMapper;
+    private final ExpertiseMapper expertiseMapper;
     private final EmailUtils emailUtils;
 
     @Autowired
-    public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper, EmailUtils emailUtils) {
+    public PaperController(UserMapper userMapper, PaperMapper paperMapper, ReviewMapper reviewMapper, ExpertiseMapper expertiseMapper, EmailUtils emailUtils) {
         this.userMapper = userMapper;
         this.paperMapper = paperMapper;
         this.reviewMapper = reviewMapper;
+        this.expertiseMapper = expertiseMapper;
         this.emailUtils = emailUtils;
     }
 
@@ -93,14 +96,46 @@ public class PaperController {
 
         List<Dictionary<String, Object>> datas = new ArrayList<>();
         for(String name : names) {
-            Dictionary<String, Object> data = new Hashtable<>();
-            data.put("name", name);
-            data.put("value", counts.get(name));
-            datas.add(data);
+            if (counts.get(name) > 0) {
+                Dictionary<String, Object> data = new Hashtable<>();
+                data.put("name", name);
+                data.put("value", counts.get(name));
+                datas.add(data);
+            }
         }
         return Feedback.info(datas);
     }
 
+    @GetMapping("/api/getPaperExpertiseDistribution")
+    public String getPaperExpertiseDistribution(){
+        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
+
+        List<String> names = new ArrayList<>();
+        List<com.ccjiahao.entity.Expertise> expertises = expertiseMapper.selectList(null);
+        for(com.ccjiahao.entity.Expertise expertise : expertises) {
+            names.add(expertise.getName());
+        }
+
+        Dictionary<String, Integer> counts = new Hashtable<>();
+        for(String name : names) counts.put(name, 0);
+
+        for (com.ccjiahao.entity.Paper paper : papers) {
+            int number = counts.get(paper.getExpertise());
+            counts.remove(paper.getState());
+            counts.put(paper.getExpertise(), number + 1);
+        }
+
+        List<Dictionary<String, Object>> datas = new ArrayList<>();
+        for(String name : names) {
+            if(counts.get(name) > 0) {
+                Dictionary<String, Object> data = new Hashtable<>();
+                data.put("name", name);
+                data.put("value", counts.get(name));
+                datas.add(data);
+            }
+        }
+        return Feedback.info(datas);
+    }
 
     @GetMapping("/api/getPapers")
     public String getPapers() {
