@@ -47,7 +47,7 @@
                 </a-table>
 
                 <a-upload-dragger v-show="steps[current].step == 2" v-model:fileList="fileList" accept=".pdf"
-                    name="file" action="http://198.211.5.158:9875/api/upload" @change="handleChange" :max-count="1"
+                    name="file" action="http://101.35.144.217:9875/api/upload" @change="handleChange" :max-count="1"
                     @drop="handleDrop" :before-upload="beforeUpload">
                     <p class="ant-upload-drag-icon">
                         <inbox-outlined></inbox-outlined>

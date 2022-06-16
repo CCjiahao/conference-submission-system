@@ -17,7 +17,7 @@
             <template v-else-if="column.key === 'action'">
                 <span>
                     <!--下载请求-->
-                    <a :href="'http://198.211.5.158:9875/api/download?uuid=' + record.paper" target="_blank">下载文章</a>
+                    <a :href="'http://101.35.144.217:9875/api/download?uuid=' + record.paper" target="_blank">下载文章</a>
                     <template v-if="record.state === '已辩论'">
                         <a-divider type="vertical" />
                         <router-link :to="{ path: '/review/review', query: { id: record.id } }">查看辩论</router-link>
@@ -98,7 +98,7 @@
             </template>
         </a-list>
 
-        <a-button type="primary" :href="'http://198.211.5.158:9875/api/download?uuid=' + paper.uuid" target="_blank">
+        <a-button type="primary" :href="'http://101.35.144.217:9875/api/download?uuid=' + paper.uuid" target="_blank">
             <template #icon>
                 <DownloadOutlined />
             </template>

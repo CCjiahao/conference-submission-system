@@ -75,7 +75,7 @@
             </template>
         </a-list>
 
-        <a-button type="primary" :href="'http://198.211.5.158:9875/api/download?uuid=' + paper.uuid" target="_blank">
+        <a-button type="primary" :href="'http://101.35.144.217:9875/api/download?uuid=' + paper.uuid" target="_blank">
             <template #icon>
                 <DownloadOutlined />
             </template>
