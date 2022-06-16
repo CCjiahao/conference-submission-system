@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, Ref } from 'vue'
-import { UpdateUserApi, GetUsers } from '@/request/api'
+import { UpdateUserApi, GetUsers, GetExpertisesApi } from '@/request/api'
 import countrys from '@/variable/countrys'
 import { message } from 'ant-design-vue';
 import { checkEmail } from '@/utils/index'
@@ -109,7 +109,7 @@ const getUsers = () => {
     GetUsers().then((res: any) => {
         if (res.errno === 0) {
             users.value = res.data['users'];
-            
+
         }
     })
 }
@@ -171,10 +171,15 @@ const countryChange = (value: any) => {
 const roleChange = (value: any) => {
     formState.user.role = value['value'];
 };
-const expertise_options: { value: string }[] = [];
-expertise_options.push({ value: 'CV' })
-expertise_options.push({ value: 'NLP' })
-expertise_options.push({ value: 'ML' })
+const expertise_options: Ref<{ value: string }[]> = ref([]);
+GetExpertisesApi().then((res: any) => {
+    if (res.errno === 0) {
+        const expertises = res.data['expertises'];
+        for (var i = 0; i < expertises.length; i++) {
+            expertise_options.value.push({ value: expertises[i]['name'] });
+        }
+    }
+})
 const expertiseChange = (values: any) => {
     var expertises = [];
     for (var i = 0; i < values.length; i++) {
