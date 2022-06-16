@@ -6,7 +6,7 @@
 
 # 项目配置
 有两个文件夹，分别是ui、server，对应前端和后端。
-数据库ip: localhost，port: 3306，password: 123456.
+数据库ip: 101.35.144.217: 3306，password: 123456.
 后端采用springboot+mybatis-plus，用于提供一系列/api/xxx接口，IDEA可以运行
 前端npm run dev运行，依赖大概有vite、pinia、等等（缺啥npm install啥吧）
 
