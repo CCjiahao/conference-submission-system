@@ -14,7 +14,7 @@
       </a-col>
       <a-col :span="6">
         <a-card>
-          <a-statistic title="昨日新增投稿数" :value="68" style="margin-right: 50px" />
+          <a-statistic title="昨日新增投稿数" :value="yesterdayPaperNumber" />
         </a-card>
       </a-col>
       <a-col :span="6">
@@ -86,6 +86,18 @@ const getPaperNumber = () => {
     })
 }
 getPaperNumber();
+
+var yesterdayPaperNumber: Ref<any[]> = ref([]);
+
+const getYesterdayPaperNumber = () => {
+    yesterdayPaperNumber.value = []
+    GetYesterdayPaperNumberApi().then((res: any) => {
+        if (res.errno === 0) {
+            yesterdayPaperNumber.value = res.data['yesterdayPaperNumber'];
+        }
+    })
+}
+getYesterdayPaperNumber();
 
 onMounted(() => {//需要获取到element,所以是onMounted的Hook
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);

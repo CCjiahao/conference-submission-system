@@ -58,6 +58,25 @@ public class PaperController {
         return Feedback.info(data);
     }
 
+    @GetMapping("/api/getYesterdayPaperNumber")
+    public String getYesterdayPaperNumber(){
+        List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
+        int yesterdayPaperNumber = 0;
+        for(int i = 0; i < papers.size(); i++){
+            Date yesterday=new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(yesterday);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            yesterday = calendar.getTime();
+            if(papers.get(i).getCommitTime().after(yesterday)){
+                yesterdayPaperNumber++;
+            }
+        }
+        Dictionary<String, Object> data = new Hashtable<>();
+        data.put("yesterdayPaperNumber", yesterdayPaperNumber);
+        return Feedback.info(data);
+    }
+
     @GetMapping("/api/getPapers")
     public String getPapers() {
         Dictionary<String, Object> data = new Hashtable<>();
