@@ -65,6 +65,7 @@ const onFinish = (values: any) => {
     LoginApi(formState.username, formState.password, formState.remember).then((res: any) => {
         if (res.errno === 0) {
             localStorage.setItem('token', res.data['token']);
+            localStorage.setItem('new_login', "true");
             store.clear()
             router.push("/");
         }

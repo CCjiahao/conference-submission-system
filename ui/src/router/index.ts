@@ -43,6 +43,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const store = userStore();
     const token = localStorage.getItem('token');
+    const new_login = localStorage.getItem('new_login') !== null;
+    if (new_login) {
+        localStorage.removeItem("new_login");
+    }
     if (to.fullPath == '/login' || to.fullPath == '/register' || to.fullPath == '/forget') next();
     else if (token) {
         if (store.isNull) {
@@ -56,7 +60,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/submission/my'
                         })
-                        if (to.fullPath == '/review/info' || to.fullPath == '/chairman/index') {
+                        if (new_login && (to.fullPath == '/review/info' || to.fullPath == '/chairman/index')) {
                             to.fullPath = '/submission/my';
                         }
                     }
@@ -66,7 +70,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/review/info'
                         })
-                        if (to.fullPath == '/submission/my' || to.fullPath == '/chairman/index') {
+                        if (new_login && (to.fullPath == '/submission/my' || to.fullPath == '/chairman/index')) {
                             to.fullPath = '/review/info';
                         }
                     }
@@ -76,7 +80,7 @@ router.beforeEach((to, from, next) => {
                             name: 'Home',
                             redirect: '/chairman/index'
                         })
-                        if (to.fullPath == '/review/info' || to.fullPath == '/submission/my') {
+                        if (new_login && (to.fullPath == '/review/info' || to.fullPath == '/submission/my')) {
                             to.fullPath = '/chairman/index';
                         }
                     }

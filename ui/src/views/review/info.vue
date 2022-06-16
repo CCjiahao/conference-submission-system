@@ -1,17 +1,13 @@
 <template>
   <div>
-    <h2>审稿人信息</h2>
+    <h2><b>审稿人信息</b></h2>
   </div>
   <br>
   <a-descriptions title="你好，审稿人">
     <a-row type="flex" justify="space-between" align="bottom">
       <a-col :span="3">
         <div class="avatar">
-          <a-avatar :size="64">
-            <template #icon>
-              <UserOutlined />
-            </template>
-          </a-avatar>
+          <a-avatar :size="64" style="background-color: #1890ff">{{ user.username }}</a-avatar>
         </div>
       </a-col>
       <a-col :span="13">
@@ -36,9 +32,9 @@
     </a-row>
   </a-descriptions>
   <br>
-  <h1>审核中的稿件</h1>
+  <h1><b>审核中的稿件</b></h1>
   <a-row :span="12" :wrap="true">
-    <div class="toProcess" v-for="item in papers" v-bind:key="item">
+    <div class="toProcess" v-for="item in papers" v-bind:key="item" style="margin: 5px;">
       <a-col :span="4">
         <a-card
           style="width: 300px; height:197px; white-space: no-warp; display:inline-block; overflow:hidden; text-overflow:ellipsis">
