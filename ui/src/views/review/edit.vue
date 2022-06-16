@@ -112,7 +112,6 @@ export default defineComponent({
   methods: {
     getPaperbyId(id: any) {
       GetPapersByIdApi(id).then((res: any) => {
-        console.log(res);
         if (res.errno === 0) {
           this.paper = res.data['paper'];
           ReviewState.paperId = res.data['paper'].id;
@@ -124,7 +123,7 @@ export default defineComponent({
     },
     submitAndJump(){
       if (token == null) {
-        console.log("登录已过期");
+        message.error("登录已过期");
         return;
       };
       if (ReviewState.suggestion === '') {
@@ -133,7 +132,6 @@ export default defineComponent({
       }
       SubmitReviewApi(token,ReviewState.paperId,ReviewState.isAssociated,ReviewState.logic,ReviewState.sci,ReviewState.innovation,ReviewState.passOrReject,ReviewState.suggestion).then((res:any)=>{
         message.info("评审意见提交成功")
-        console.log(res);
         this.$router.replace({path:'/review/log'});
       }).catch((err:any)=>{
           console.log(err);
@@ -141,7 +139,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(this.$route.query.id);
     let id = this.$route.query.id;
     this.getPaperbyId(id);
   },

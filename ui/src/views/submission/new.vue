@@ -185,7 +185,6 @@ const addCollaborator = () => {
 
 const fileList = ref([])
 const handleChange = (info: UploadChangeParam) => {
-    console.log(info)
     const status = info.file.status;
     if (status === 'done') {
         paperState.paper = info.file.response['data']['uuid'];
@@ -221,7 +220,6 @@ const onFinish = (values: any) => {
     }).catch((err: any) => {
         console.log(err);
     })
-    console.log('Success:', values);
 };
 
 const onFinishFailed = (errorInfo: any) => {

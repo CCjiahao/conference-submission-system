@@ -139,7 +139,6 @@ const handleOk = (e: MouseEvent) => {
     if (formState.user.email === '') { message.error('邮件不能为空'); return; }
     if (!checkEmail(formState.user.email)) { message.error('邮件不合法'); return; }
     UpdateUserApi(formState.user.username, formState.user.name, formState.user.school, formState.user.country, formState.user.expertise, formState.user.email, formState.user.role).then((res: any) => {
-        console.log(res)
         if (res.errno === 0) {
             getUsers();
         }
