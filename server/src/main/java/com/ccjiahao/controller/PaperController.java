@@ -81,45 +81,24 @@ public class PaperController {
     public String getPaperProcessDistribution(){
         List<com.ccjiahao.entity.Paper> papers = paperMapper.selectList(null);
 
-        int waitForReviewPaperNumber = 0;
-        int waitForRebuttalPaperNumber = 0;
-        int rebuttaledPaperNumber = 0;
-        int ConfirmedPaperNumber = 0;
-        int AcceptedPaperNumber = 0;
-        int RejectedPaperNumber = 0;
+        Dictionary<String, Integer> counts = new Hashtable<>();
+        String[] names = new String[]{"待审核", "待辩论", "已辩论", "已确认", "已接收", "已拒绝"};
+        for(String name : names) counts.put(name, 0);
 
-        for(int i = 0; i < papers.size(); i++){
-            switch(papers.get(i).getState()){
-                case "待审核" :
-                    waitForReviewPaperNumber++;
-                    break;
-                case "待辩论" :
-                    waitForRebuttalPaperNumber++;
-                    break;
-                case "已辩论" :
-                    rebuttaledPaperNumber++;
-                    break;
-                case "已确认" :
-                    ConfirmedPaperNumber++;
-                    break;
-                case "已接收" :
-                    AcceptedPaperNumber++;
-                    break;
-                case "已拒绝" :
-                    RejectedPaperNumber++;
-                    break;
-            }
+        for (com.ccjiahao.entity.Paper paper : papers) {
+            int number = counts.get(paper.getState());
+            counts.remove(paper.getState());
+            counts.put(paper.getState(), number + 1);
         }
 
-        Dictionary<String, Object> data = new Hashtable<>();
-        data.put("waitForReviewPaperNumber", waitForReviewPaperNumber);
-        data.put("waitForRebuttalPaperNumber", waitForRebuttalPaperNumber);
-        data.put("rebuttaledPaperNumber", rebuttaledPaperNumber);
-        data.put("ConfirmedPaperNumber", ConfirmedPaperNumber);
-        data.put("AcceptedPaperNumber", AcceptedPaperNumber);
-        data.put("RejectedPaperNumber", RejectedPaperNumber);
-
-        return Feedback.info(data);
+        List<Dictionary<String, Object>> datas = new ArrayList<>();
+        for(String name : names) {
+            Dictionary<String, Object> data = new Hashtable<>();
+            data.put("name", name);
+            data.put("value", counts.get(name));
+            datas.add(data);
+        }
+        return Feedback.info(datas);
     }
 
 

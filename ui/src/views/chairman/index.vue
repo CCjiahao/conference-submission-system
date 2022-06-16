@@ -1,58 +1,58 @@
 <template>
-<h2>期刊主席首页</h2>
+    <h2>期刊主席首页</h2>
     <!-- 统计数据部分 -->
     <a-row :gutter="24">
-      <a-col :span="6">
-        <a-card>
-          <a-statistic title="注册用户人数" :value="userNumber"/>
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic title="已投稿论文总数" :value="paperNumber" />
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic title="昨日新增投稿数" :value="yesterdayPaperNumber" />
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic title="当前待审核投稿数" :value="waitForReviewPaperNumber"/>
-        </a-card>
-      </a-col>
+        <a-col :span="6">
+            <a-card>
+                <a-statistic title="注册用户人数" :value="userNumber" />
+            </a-card>
+        </a-col>
+        <a-col :span="6">
+            <a-card>
+                <a-statistic title="已投稿论文总数" :value="paperNumber" />
+            </a-card>
+        </a-col>
+        <a-col :span="6">
+            <a-card>
+                <a-statistic title="昨日新增投稿数" :value="yesterdayPaperNumber" />
+            </a-card>
+        </a-col>
+        <a-col :span="6">
+            <a-card>
+                <a-statistic title="当前待审核投稿数" :value="waitForReviewPaperNumber" />
+            </a-card>
+        </a-col>
     </a-row>
 
     <br />
 
     <!-- 图表部分 -->
     <a-row :gutter="24">
-    <a-col :span="12">
-        <a-card title="论文投稿数量分析">
-            <div id="submissionChart" :style="{width: '100%', height: '25vh'}"></div>
-        </a-card>
-    </a-col>
         <a-col :span="12">
-        <a-card title="论文审稿数量分析">
-            <div id="reviewNumChart" :style="{width: '100%', height: '25vh'}"></div>
-        </a-card>
-    </a-col>
+            <a-card title="论文投稿数量分析">
+                <div id="submissionChart" :style="{ width: '100%', height: '25vh' }"></div>
+            </a-card>
+        </a-col>
+        <a-col :span="12">
+            <a-card title="论文审稿数量分析">
+                <div id="reviewNumChart" :style="{ width: '100%', height: '25vh' }"></div>
+            </a-card>
+        </a-col>
     </a-row>
 
     <br />
 
     <a-row :gutter="24">
-    <a-col :span="12">
-        <a-card title="论文审稿进度分析">
-            <div id="reviewProcessChart" :style="{width: '100%', height: '25vh'}"></div>
-        </a-card>
-    </a-col>
         <a-col :span="12">
-        <a-card title="论文分类占比分析">
-            <div id="paperChart" :style="{width: '100%', height: '25vh'}"></div>
-        </a-card>
-    </a-col>
+            <a-card title="论文审稿进度分析">
+                <div id="reviewProcessChart" :style="{ width: '100%', height: '25vh' }"></div>
+            </a-card>
+        </a-col>
+        <a-col :span="12">
+            <a-card title="论文分类占比分析">
+                <div id="paperChart" :style="{ width: '100%', height: '25vh' }"></div>
+            </a-card>
+        </a-col>
     </a-row>
 
 </template>
@@ -61,12 +61,10 @@
 import { Ref, ref, reactive, computed } from 'vue'
 import { onMounted } from "vue";
 import * as echarts from 'echarts'
-import { GetUserNumberApi, GetPaperNumberApi, GetYesterdayPaperNumberApi, GetPaperProcessDistributionApi,GetPaperExpertiseDistributionApi, GetPaperBySubmitTimeApi, GetPaperByReviewTimeApi } from '@/request/api';
+import { GetUserNumberApi, GetPaperNumberApi, GetYesterdayPaperNumberApi, GetPaperProcessDistributionApi, GetPaperExpertiseDistributionApi, GetPaperBySubmitTimeApi, GetPaperByReviewTimeApi } from '@/request/api';
 
-var userNumber: Ref<any[]> = ref([]);
-
+var userNumber: Ref<number> = ref(0);
 const getUserNumber = () => {
-    userNumber.value = []
     GetUserNumberApi().then((res: any) => {
         if (res.errno === 0) {
             userNumber.value = res.data['userNumber'];
@@ -75,10 +73,8 @@ const getUserNumber = () => {
 }
 getUserNumber();
 
-var paperNumber: Ref<any[]> = ref([]);
-
+var paperNumber: Ref<number> = ref(0);
 const getPaperNumber = () => {
-    paperNumber.value = []
     GetPaperNumberApi().then((res: any) => {
         if (res.errno === 0) {
             paperNumber.value = res.data['paperNumber'];
@@ -87,10 +83,8 @@ const getPaperNumber = () => {
 }
 getPaperNumber();
 
-var yesterdayPaperNumber: Ref<any[]> = ref([]);
-
+var yesterdayPaperNumber: Ref<number> = ref(0);
 const getYesterdayPaperNumber = () => {
-    yesterdayPaperNumber.value = []
     GetYesterdayPaperNumberApi().then((res: any) => {
         if (res.errno === 0) {
             yesterdayPaperNumber.value = res.data['yesterdayPaperNumber'];
@@ -99,40 +93,30 @@ const getYesterdayPaperNumber = () => {
 }
 getYesterdayPaperNumber();
 
-//以下是有问题的代码
+const paperProcessDistribution: Ref<number[]> = ref([]);
+const waitForReviewPaperNumber: Ref<number> = ref(0);
 
-const paperProcessDistribution: Ref<any[]> = ref([]);
-const waitForReviewPaperNumber: Ref<any[]> = ref([]);
-const numbersTemp: { value: string }[] = [];
-
-const getPaperProcessDistribution = () => {
-    paperProcessDistribution.value = []
-    GetPaperProcessDistributionApi().then((res: any) => {
-        if (res.errno === 0) {
-            // paperProcessDistribution.value = res.data;
-
-            paperProcessDistribution.value.push(res.data['waitForReviewPaperNumber']);
-            paperProcessDistribution.value.push(res.data['waitForRebuttalPaperNumber']);
-            
-            numbersTemp.push(res.data['waitForReviewPaperNumber']);
-            numbersTemp.push(res.data['waitForRebuttalPaperNumber']);
-
-            waitForReviewPaperNumber.value = res.data['waitForReviewPaperNumber'];
-        }
-    })
-}
-getPaperProcessDistribution();
-
-console.log("paperProcessDistribution.value",paperProcessDistribution.value);
-console.log("paperProcessDistribution.value[0]",paperProcessDistribution.value[0]);
-
-console.log("numbersTemp",numbersTemp);
-console.log("numbersTemp[0]",numbersTemp[0]);
-
-console.log("waitForReviewPaperNumber",waitForReviewPaperNumber);
-
-
-onMounted(() => {//需要获取到element,所以是onMounted的Hook
+onMounted(() => {
+    const getPaperProcessDistribution = () => {
+        paperProcessDistribution.value = []
+        GetPaperProcessDistributionApi().then((res: any) => {
+            if (res.errno === 0) {
+                console.log(res)
+                paperProcessDistribution.value = res.data;
+                waitForReviewPaperNumber.value = res.data[0]['value'];
+                reviewProcessChart.setOption({
+                    series: [
+                        {
+                            type: 'pie',
+                            data: paperProcessDistribution.value,
+                            radius: ['40%', '70%']
+                        }
+                    ]
+                });
+            }
+        })
+    }
+    getPaperProcessDistribution();
     let submissionChart = echarts.init(document.getElementById("submissionChart") as HTMLElement);
     let reviewNumChart = echarts.init(document.getElementById("reviewNumChart") as HTMLElement);
     let reviewProcessChart = echarts.init(document.getElementById("reviewProcessChart") as HTMLElement);
@@ -146,12 +130,12 @@ onMounted(() => {//需要获取到element,所以是onMounted的Hook
         },
         yAxis: {},
         series: [
-        {
-            name: "用户量",
-            type: "line",
-            data: [5, 20, 36, 10, 10, 20],
-            areaStyle: {}
-        },
+            {
+                name: "用户量",
+                type: "line",
+                data: [5, 20, 36, 10, 10, 20],
+                areaStyle: {}
+            },
         ],
     });
 
@@ -162,53 +146,15 @@ onMounted(() => {//需要获取到element,所以是onMounted的Hook
         },
         yAxis: {},
         series: [
-        {
-            name: "用户量",
-            type: "line",
-            data: [5, 20, 36, 10, 10, 20],
-            areaStyle: {}
-        },
+            {
+                name: "用户量",
+                type: "line",
+                data: [5, 20, 36, 10, 10, 20],
+                areaStyle: {}
+            },
         ],
     });
 
-    reviewProcessChart.setOption({
-        // dataset: paperProcessDistribution,
-        series: [
-            {
-                type: 'pie',
-                data: 
-                // paperProcessDistribution
-                [
-                    {
-                    value: numbersTemp[0],
-                    name: 'A'
-                    },
-                    // {
-                    // value: waitForRebuttalPaperNumber,
-                    // name: 'B'
-                    // },
-                    // {
-                    // value: rebuttaledPaperNumber,
-                    // name: 'C'
-                    // },
-                    // {
-                    // value: ConfirmedPaperNumber,
-                    // name: 'A'
-                    // },
-                    // {
-                    // value: AcceptedPaperNumber,
-                    // name: 'B'
-                    // },
-                    // {
-                    // value: RejectedPaperNumber,
-                    // name: 'C'
-                    // }
-                ]
-                ,
-                radius: ['40%', '70%']
-            }
-        ]
-    });
 
     paperChart.setOption({
         series: [
@@ -216,16 +162,16 @@ onMounted(() => {//需要获取到element,所以是onMounted的Hook
                 type: 'pie',
                 data: [
                     {
-                    value: 335,
-                    name: 'A'
+                        value: 335,
+                        name: 'A'
                     },
                     {
-                    value: 234,
-                    name: 'B'
+                        value: 234,
+                        name: 'B'
                     },
                     {
-                    value: 1548,
-                    name: 'C'
+                        value: 1548,
+                        name: 'C'
                     }
                 ],
                 radius: ['40%', '70%']
@@ -234,10 +180,10 @@ onMounted(() => {//需要获取到element,所以是onMounted的Hook
     });
 
     window.onresize = function () {//自适应大小
-    submissionChart.resize();
-    reviewNumChart.resize();
-    reviewProcessChart.resize();
-    paperChart.resize();
+        submissionChart.resize();
+        reviewNumChart.resize();
+        reviewProcessChart.resize();
+        paperChart.resize();
     };
 });
 
