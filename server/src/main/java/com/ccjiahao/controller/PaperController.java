@@ -367,6 +367,14 @@ public class PaperController {
         paper1.setState("已接收");
         paperMapper.updateById(paper1);
 
+        // 如果一个人被接收一篇文章，那么就认为这个人对这个领域有了解
+        User user = userMapper.selectUserByUsername(paper1.getUsername());
+        List<String> expertises = new ArrayList<>(List.of(user.getExpertise().split(",")));
+        if (!expertises.contains(paper1.getExpertise())) {
+            user.setExpertise(user.getExpertise() + "," + paper1.getExpertise());
+        }
+        userMapper.updateByUsername(user);
+
         List<String> names;
         if(paper1.getCollaborators().equals("")) {
             names = new ArrayList<>();
@@ -377,8 +385,8 @@ public class PaperController {
         names.add(paper1.getUsername());
         List<String> emails = new ArrayList<>();
         for (String name: names) {
-            User user = userMapper.selectUserByUsername(name);
-            emails.add(user.getEmail());
+            User user1 = userMapper.selectUserByUsername(name);
+            emails.add(user1.getEmail());
         }
         emailUtils.sendAcceptRemain(emails.toArray(String[]::new), names.toArray(String[]::new), paper1.getTitle());
         return Feedback.info(null);
